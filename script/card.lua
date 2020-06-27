@@ -67,7 +67,7 @@ Card.GetPower=Card.GetAttack
 --Note: See Card.GetPower
 local card_is_attack=Card.IsAttack
 function Card.IsAttack(c,atk)
-	return c:GetAttack()==atk 
+	return c:GetAttack()==atk
 end
 Card.IsPower=Card.IsAttack
 --check if a card's power is less than or equal to a given value
@@ -105,11 +105,7 @@ Card.GetShield=Card.GetDefense
 --Note: See Card.GetShield
 local card_is_defense=Card.IsDefense
 function Card.IsDefense(c,def)
-	if card_is_defense then
-		return card_is_defense(c,def)
-	else
-		return c:GetDefense()==def
-	end
+	return c:GetDefense()==def
 end
 Card.IsShield=Card.IsDefense
 --check if a card's shield is less than or equal to a given value
@@ -126,6 +122,13 @@ function Card.IsDefenseAbove(c,def)
 	return c:GetDefense()>=def
 end
 Card.IsShieldAbove=Card.IsDefenseAbove
+--check if a card has a particular effect
+--Note: Overwritten to not count a lost effect
+local card_is_has_effect=Card.IsHasEffect
+function Card.IsHasEffect(c,code)
+	if c:GetFlagEffectLabel(code) and c:GetFlagEffectLabel(code)>0 then return false end
+	return card_is_has_effect(c,code)
+end
 --check if a card is a particular position
 --Note: Overwritten to check if the attacking card or a card in LOCATION_SZONE is in [Rest]
 local card_is_position=Card.IsPosition

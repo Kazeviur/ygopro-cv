@@ -36,4 +36,6 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	Duel.ChangePosition(c,POS_FACEUP_STAND)
+	--lose effect (twin drive)
+	Duel.LoseEffect(c,EFFECT_TWIN_DRIVE,RESET_DISABLE+RESET_PHASE+PHASE_END,aux.Stringid(sid,2))
 end

@@ -224,6 +224,15 @@ function Duel.GetDriveCheckGroup()
 	local cp=Duel.GetAttacker():GetControler()
 	return Duel.GetMatchingGroup(Card.IsStatus,cp,LOCATION_ALL,0,nil,STATUS_DRIVE_CHECK)
 end
+--make a card lose an effect
+function Duel.LoseEffect(targets,code,reset_flag,desc,reset_count)
+	--code: the code of the effect to lose
+	if type(targets)=="Card" then targets=Group.FromCards(targets) end
+	reset_count=reset_count or 1
+	for tc in aux.Next(targets) do
+		tc:RegisterFlagEffect(code,RESET_EVENT+RESETS_STANDARD+reset_flag,EFFECT_FLAG_CLIENT_HINT,reset_count,code,desc)
+	end
+end
 --Renamed Duel functions
 --send a card to the drop zone
 Duel.SendtoDrop=Duel.SendtoGrave
