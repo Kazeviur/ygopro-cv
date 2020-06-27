@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_HUMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--intercept
+	--skill icon (intercept)
 	aux.EnableIntercept(c)
 	--get effect
 	aux.AddSingleAutoEffect(c,0,EVENT_CUSTOM+EVENT_DRIVE_CHECK,nil,scard.op1,nil,scard.con1)

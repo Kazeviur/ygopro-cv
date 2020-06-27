@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_DRAGONMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--twin drive
+	--skill icon (twin drive)
 	aux.EnableEffectCustom(c,EFFECT_TWIN_DRIVE)
 	--ride
 	local e1=aux.AddAutoEffect(c,0,EVENT_TO_GRAVE,scard.tg1,scard.op1,nil,scard.con1)

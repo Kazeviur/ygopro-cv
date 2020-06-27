@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_HIGH_BEAST)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--boost
+	--skill icon (boost)
 	aux.EnableBoost(c)
 	--get effect
 	local targ_func=aux.TargetCardFunction(PLAYER_SELF,scard.effilter,LOCATION_MZONE+LOCATION_SZONE,0,1,1,HINTMSG_GAINPOWER,c)

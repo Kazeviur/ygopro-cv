@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_GILLMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--boost
+	--skill icon (boost)
 	aux.EnableBoost(c)
 	--draw
 	aux.AddActivatedEffect(c,0,LOCATION_MZONE+LOCATION_SZONE,nil,scard.cost1,scard.op1,EFFECT_FLAG_CARD_TARGET)

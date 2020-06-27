@@ -5,6 +5,6 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_ELF)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--boost
+	--skill icon (boost)
 	aux.EnableBoost(c)
 end

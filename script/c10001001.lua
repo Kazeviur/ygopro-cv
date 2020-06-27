@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_SALAMANDER)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--twin drive
+	--skill icon (twin drive)
 	aux.EnableEffectCustom(c,EFFECT_TWIN_DRIVE)
 	--get effect
 	aux.AddSingleAutoEffect(c,0,EVENT_CUSTOM+EVENT_DRIVE_CHECK,nil,scard.op1,nil,scard.con1)

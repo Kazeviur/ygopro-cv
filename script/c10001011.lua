@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_HUMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--boost
+	--skill icon (boost)
 	aux.EnableBoost(c)
 	--get effect
 	aux.AddSingleAutoEffect(c,0,EVENT_ATTACK_ANNOUNCE,nil,scard.op1,EFFECT_FLAG_CARD_TARGET,nil,aux.DiscardCost(1))

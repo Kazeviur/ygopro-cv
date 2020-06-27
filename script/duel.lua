@@ -66,8 +66,7 @@ function Duel.MoveToField(c,move_player,target_player,dest,pos,enabled,zone)
 	return res
 end
 --swap two cards on the field
---Note 1/2: Overwritten to swap a card in LOCATION_MZONE with a card in LOCATION_SZONE and vice-versa
---Note 2/2: The effects applied to a card reset when it moves from LOCATION_MZONE to LOCATION_SZONE and vice-versa
+--Note: Overwritten to swap a card in LOCATION_MZONE with a card in LOCATION_SZONE and vice-versa
 local duel_swap_sequence=Duel.SwapSequence
 function Duel.SwapSequence(c1,c2)
 	local cp1=c1:GetControler()
@@ -156,8 +155,8 @@ function Duel.Call(targets,call_player,pos,dest,zone)
 	--targets: the card to call
 	--call_player: the player who calls the card
 	--pos: POS_FACEUP_STAND to call in [Stand] or POS_FACEUP_REST to call in [Rest]
-	--dest: LOCATION_MZONE to call to front rear-guard circle or LOCATION_SZONE to call to back rear-guard circle
-	--zone: the circle to call the card to
+	--dest: LOCATION_MZONE to call on front rear-guard circle or LOCATION_SZONE to call on back rear-guard circle
+	--zone: the circle to call the card on
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	pos=pos or POS_FACEUP_STAND
 	dest=dest or LOCATION_MZONE+LOCATION_SZONE
@@ -199,7 +198,7 @@ function Duel.SendtoTrigger(targets)
 			Duel.ConfirmCards(1-tc:GetControler(),tc)
 		end
 		res=res+Duel.Remove(tc,POS_FACEUP,REASON_TRIGGER+REASON_RULE)
-		--raise event for "Trigger"
+		--raise event for trigger unit
 		Duel.RaiseSingleEvent(tc,EVENT_CUSTOM+EVENT_TRIGGER_UNIT,Effect.GlobalEffect(),0,0,0,0)
 		Duel.RaiseEvent(tc,EVENT_CUSTOM+EVENT_TRIGGER_UNIT,Effect.GlobalEffect(),0,0,0,0)
 	end

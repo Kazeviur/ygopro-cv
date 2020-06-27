@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_ELF)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--twin drive
+	--skill icon (twin drive)
 	aux.EnableEffectCustom(c,EFFECT_TWIN_DRIVE)
 	--get effect
 	aux.AddActivatedEffect(c,0,LOCATION_MZONE,aux.VCCondition,aux.CounterBlastCost(2),scard.op1)

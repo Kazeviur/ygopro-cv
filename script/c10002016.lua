@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_DRAGONMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--boost
+	--skill icon (boost)
 	aux.EnableBoost(c)
 	--get effect
 	aux.AddAutoEffect(c,0,EVENT_TO_GRAVE,nil,scard.op1,nil,scard.con1)

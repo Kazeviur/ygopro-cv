@@ -13,10 +13,10 @@ CARD_BRINGER_OF_GOOD_LUCK_EPONA		=10001013	--EVENT_CUSTOM+EVENT_TRIGGER_UNIT
 LOCATION_ALL		=0xff		--All locations
 LOCATION_DECK		=0x01		--Deck
 LOCATION_HAND		=0x02		--Hand
-LOCATION_MZONE		=0x04		--Monster Zone
-LOCATION_SZONE		=0x08		--Spell & Trap Zone (sequences 0~4)
-LOCATION_GRAVE		=0x10		--Graveyard
-LOCATION_REMOVED	=0x20		--Banished
+LOCATION_MZONE		=0x04		--Vanguard Circle (sequence 2), Rear-Guard Circle (sequence 1,3), Guardian Circle (sequence 5)
+LOCATION_SZONE		=0x08		--Rear-Guard Circle (sequence 0~2)
+LOCATION_GRAVE		=0x10		--Drop Zone
+LOCATION_REMOVED	=0x20		--Damage Zone/Trigger Zone
 LOCATION_GZONE		=0x40		--G Zone
 LOCATION_SOUL		=0x80		--Soul
 LOCATION_ONFIELD	=0x0c		--On the field (LOCATION_MZONE+LOCATION_SZONE)
@@ -34,14 +34,14 @@ ZONE_VC					=0x4	--Vanguard Circle
 ZONE_RC_FRONT			=0xa	--Front Rear-Guard Circles
 ZONE_RC_BACK			=0xe	--Back Rear-Guard Circles
 --Position
-POS_FACEUP_STAND		=0x1	--Face-up Stand
-POS_FACEDOWN_STAND		=0x2	--Face-down Stand
-POS_FACEUP_REST			=0x4	--Face-up Rest
-POS_FACEDOWN_REST		=0x8	--Face-down Rest
+POS_FACEUP_STAND		=0x1	--Face-up [Stand]
+POS_FACEDOWN_STAND		=0x2	--Face-down [Stand]
+POS_FACEUP_REST			=0x4	--Face-up [Rest]
+POS_FACEDOWN_REST		=0x8	--Face-down [Rest]
 POS_FACEUP				=0x5	--Face-up
 POS_FACEDOWN			=0xa	--Face-down
-POS_STAND				=0x3	--Stand
-POS_REST				=0xc	--Rest
+POS_STAND				=0x3	--[Stand]
+POS_REST				=0xc	--[Rest]
 --Card Type
 TYPE_ALL			=0x4ffffff	--All Card Types
 TYPE_MONSTER		=0x1		--(unused)
@@ -607,7 +607,7 @@ EFFECT_CHANGE_LINK_FINAL			=422	--(unused)
 EFFECT_ADD_LINKMARKER				=423	--(unused)
 EFFECT_REMOVE_LINKMARKER			=424	--(unused)
 EFFECT_CHANGE_LINKMARKER			=425	--(unused)
---The following is only available in YGOPro VG
+--The following is only available in YGOPro CV
 EFFECT_REST_MODE					=500	--Workaround to [Rest] a card in LOCATION_SZONE ("Little Sage, Marron" TD01/008)
 EFFECT_TWIN_DRIVE					=600	--Twin Drive!! ("Crimson Butterfly, Brigitte" TD01/001)
 EFFECT_UPDATE_CRITICAL				=601	--Increase/decrease [Critical] ("Solitary Knight, Gancelot" TD01/003)
@@ -685,7 +685,7 @@ EVENT_PHASE_START				=0x2000	--At the start of a phase of a turn (combined with 
 EVENT_ADD_COUNTER				=0x10000	--(unused)
 EVENT_REMOVE_COUNTER			=0x20000	--(unused)
 EVENT_CUSTOM					=0x10000000	--Custom event
---The following is only available in YGOPro VG
+--The following is only available in YGOPro CV
 EVENT_DRIVE_CHECK				=CARD_CRIMSON_BUTTERFLY_BRIGITTE	--Drive Check
 EVENT_PLACED_RC					=CARD_BLASTER_BLADE					--When a card is placed on (RC)
 EVENT_BOOST						=CARD_WINGAL						--When a card boosts another card
@@ -744,8 +744,8 @@ HINTMSG_FLIPOVER		=510	--Select a card to flip over.
 HINTMSG_ATOHAND			=511	--Select a card to add to your hand.
 --Information displayed in a dialog box
 ERROR_DECKCOUNT			=1450	--Your deck must be exactly 50 cards!
-ERROR_TRIGGERCOUNT		=1451	--Your deck must have exactly 16 trigger units!
-ERROR_HEALCOUNT			=1452	--You cannot include more than 4 trigger units with [Heal] in your deck!
+ERROR_TRIGGERCOUNT		=1451	--Your deck must have exactly 16 Trigger Units!
+ERROR_HEALCOUNT			=1452	--You cannot include more than 4 Trigger Units with "HEAL" in your deck!
 ERROR_NOTARGETS			=1630	--There is no applicable card.
 --Yes No Message (for Duel.SelectYesNo)
 YESNOMSG_RETIRE			=600	--Retire a card?
@@ -756,8 +756,8 @@ OPTION_CALLFRONT		=1190	--Call to front Rear-Guard Circle.
 OPTION_CALLBACK			=1191	--Call to back Rear-Guard Circle.
 --Description (for SetDescription, EFFECT_FLAG_CLIENT_HINT)
 DESC_REST				=111	--[Rest]
-DESC_CALL				=1152	--Call
-DESC_MOVE				=1170	--Move
+DESC_CALL				=1170	--Call
+DESC_MOVE				=1171	--Move
 DESC_STAND_UP			=1650	--Stand Up!!
 DESC_STAND_PHASE		=1651	--Stand & Draw
 DESC_RIDE_PHASE			=1652	--Ride Phase

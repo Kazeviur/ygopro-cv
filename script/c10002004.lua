@@ -5,6 +5,6 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_HUMAN)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--intercept
+	--skill icon (intercept)
 	aux.EnableIntercept(c)
 end

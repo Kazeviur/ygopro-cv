@@ -6,7 +6,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_FLAME_DRAGON)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--twin drive
+	--skill icon (twin drive)
 	aux.EnableEffectCustom(c,EFFECT_TWIN_DRIVE)
 	--reduce power
 	aux.AddContinuousUpdatePower(c,LOCATION_MZONE+LOCATION_SZONE,-2000,scard.con1)

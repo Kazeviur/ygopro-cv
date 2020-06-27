@@ -5,7 +5,7 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_FLAME_DRAGON)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--intercept
+	--skill icon (intercept)
 	aux.EnableIntercept(c)
 	--retire
 	aux.AddSingleAutoEffect(c,0,EVENT_PLACED_VC,scard.tg1,scard.op1,EFFECT_FLAG_CARD_TARGET,aux.AND(aux.VCCondition,scard.con1),scard.cost1)

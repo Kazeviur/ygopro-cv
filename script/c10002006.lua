@@ -6,6 +6,6 @@ function scard.initial_effect(c)
 	aux.AddRace(c,RACE_WINGED_DRAGON)
 	--unit
 	aux.EnableUnitAttribute(c)
-	--intercept
+	--skill icon (intercept)
 	aux.EnableIntercept(c)
 end
