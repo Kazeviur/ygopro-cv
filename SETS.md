@@ -38,6 +38,7 @@
 ## Cardfight!! Vanguard
 <details>
 <summary></summary>
+
 ### [2011](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=3)
 
 - ~**December 3, 2011** : Trial Deck | TD01 Blaster Blade : `10001XXX`~
@@ -104,6 +105,7 @@
 ## Cardfight!! Vanguard G
 <details>
 <summary></summary>
+
 ### [2015](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=51)
 
 - **February 27, 2015** : Trial Deck | G-TD01 Awakening of the Interdimensional Dragon : `15001XXX`
@@ -179,6 +181,7 @@
 ## Cardfight!! Vanguard V Series
 <details>
 <summary></summary>
+
 ### [2018](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=109)
 
 - **May 29, 2018** : Start Deck | V-SD01 2018 Free Experience Deck "Royal Paladin" : `28001XXX`

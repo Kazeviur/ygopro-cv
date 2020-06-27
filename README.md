@@ -10,11 +10,11 @@
 If you do not build your deck according to the following rules, you will lose the game and have to rebuild your deck:<br>
 ● Your deck must be exactly 50 cards.<br>
 ● Your deck must have exactly 16 [trigger units](https://cardfight.fandom.com/wiki/Trigger).<br>
-● You cannot have more than 4 trigger units with [Heal] in your deck.
+● You cannot have more than 4 trigger units with "HEAL" in your deck.
 3. Choose a [grade](https://cardfight.fandom.com/wiki/Card_Mechanics) 0 card from your main deck and put it face down on your vanguard circle (VC) as your "[first vanguard](https://cardfight.fandom.com/wiki/First_Vanguard)".<br>
 4. Shuffle your deck and [draw](https://cardfight.fandom.com/wiki/Specific_Actions#Draw) 5 cards. Then, you have 1 chance to choose any number of cards from your hand, put them on the bottom of your deck, draw the same number of cards, then [shuffle](https://cardfight.fandom.com/wiki/Specific_Actions#Shuffle) your deck if you returned any cards.<br>
 5. Both players simultaneously turn their first vanguards face up.
-6. During your [Stand Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Stand_Phase), turn all of your units from [[Rest]](https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest) to [[Stand]]((https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest)).
+6. During your [Stand Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Stand_Phase), turn all of your units from [Rest](https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest) to [Stand]((https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest)).
 7. During your [Draw Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Draw_Phase), draw 1 card.
 8. During your [Ride Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Ride_Phase), you may [ride](https://cardfight.fandom.com/wiki/Ride) once. Choose a unit from your hand whose grade is one greater than or equal to your current vanguard's grade, and [place](https://cardfight.fandom.com/wiki/Specific_Actions#Place) it on your (VC) as [Stand]. This is called a "normal ride".<br>
 9. During your [Main Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Main_Phase), you may do the following actions in any order and as many times as you want:<br>
@@ -54,7 +54,7 @@ If you do not build your deck according to the following rules, you will lose th
 1. If a player's damage zone has six or more cards, that player loses.
 2. If a player's deck has no cards, that player loses.
 3. If a player has no vanguard, that player chooses a card from their soul, and rides it as [Stand]. However, if that player's soul has no cards they can ride, that player loses.
-4. A player may win or lose the game automatically as a result of an effect, such as "[Star-vader, "Omega" Glendios](https://cardfight.fandom.com/wiki/Star-vader,_%22Omega%22_Glendios)".
+4. A player may win or lose the game automatically as a result of an effect, such as _[Star-vader, "Omega" Glendios](https://cardfight.fandom.com/wiki/Star-vader,_%22Omega%22_Glendios)_.
 
 ## Extra information
 <details>
@@ -68,8 +68,8 @@ If you do not build your deck according to the following rules, you will lose th
 <details>
 <summary>Card Type</summary>
 
-- `0x3	Spell` = [Normal unit](https://cardfight.fandom.com/wiki/Normal_unit)
-- `0x5	Trap` = Trigger unit
+- `0x3	Monster+Spell` = [Normal unit](https://cardfight.fandom.com/wiki/Normal_unit)
+- `0x5	Monster+Trap` = Trigger unit
 - `0x20	Effect` = Critical
 - `0x80	Ritual` = Heal
 - `0x200	Spirit` = Draw
@@ -97,7 +97,7 @@ If you do not build your deck according to the following rules, you will lose th
 <details>
 <summary>Location</summary>
 
-- `0x4	Monster Zone` = Vanguard Circle (Sequence 2) + Rear-guard Circle (Sequence 1, 3) + Guardian Circle (Sequence 5) (Field)
+- `0x4	Monster Zone` = Vanguard Circle (Sequence 2) + Rear-guard Circle (Sequence 1,3) + Guardian Circle (Sequence 5) (Field)
 - `0x8	Spell & Trap Zone` = Rear-guard Circles (Sequence 0~2) (Field)
 - `0x10	Graveyard` = Drop Zone
 - `0x20	Banished` = Damage Zone

@@ -1,7 +1,6 @@
 ## Card Data
 - [ ] **You can't search for some card information**
 	- [ ] Critical
-	- [ ] Skills (Twin Drive!!, Boost, Intercept, etc.)
 	- [ ] Rarity
 - You can only search for a card's Clan by typing `Clan: Name Goes Here` in the search bar.
 - You can only search for a card's Race by typing `Race: Name Goes Here` in the search bar.
