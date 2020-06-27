@@ -1,5 +1,5 @@
---register rules
 Rule={}
+--register rules
 function Rule.RegisterRules(c)
 	local e1=Effect.CreateEffect(c)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_NO_TURN_RESET)
@@ -54,8 +54,8 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Draw(PLAYER_ONE,5,REASON_RULE)
 	Duel.Draw(PLAYER_TWO,5,REASON_RULE)
 	--redraw
-	Rule.redraw(tp)
-	Rule.redraw(1-tp)
+	Rule.redraw(PLAYER_ONE)
+	Rule.redraw(PLAYER_TWO)
 	--stand up vanguard
 	local g=Duel.GetMatchingGroup(Card.IsVanguard,0,LOCATION_MZONE,LOCATION_MZONE,nil)
 	Duel.Hint(HINT_OPSELECTED,PLAYER_TWO,DESC_STAND_UP)
@@ -108,7 +108,6 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	Duel.RegisterEffect(e6,0)
 	--inflict damage
 	local e7=Effect.GlobalEffect()
-	e7:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e7:SetCode(EVENT_BATTLED)
 	e7:SetCondition(Rule.DamageCondition)
@@ -237,25 +236,16 @@ end
 function Rule.GuardOperation(e,tp,eg,ep,ev,re,r,rp)
 	local turnp=Duel.GetTurnPlayer()
 	local d=Duel.GetAttackTarget()
-	local g=Duel.GetMatchingGroup(aux.TRUE,1-turnp,LOCATION_HAND,0,nil)
+	local g=Duel.GetMatchingGroup(aux.TRUE--[[Card.IsAbleToCall]],1-turnp,LOCATION_HAND,0,nil)
 	if g:GetCount()==0 then return end
 	Duel.Hint(HINT_OPSELECTED,turnp,DESC_GUARD_STEP)
 	Duel.Hint(HINT_SELECTMSG,1-turnp,HINTMSG_TOGCIRCLE)
 	local tc=g:Select(1-turnp,0,1,nil):GetFirst()
 	if not tc then return end
-	if tc:IsLocation(LOCATION_MZONE) then
-		Duel.MoveToField(tc,1-turnp,1-turnp,LOCATION_MZONE,POS_FACEUP_REST,true,bit.lshift(0x1,5))
-	else
-		Duel.Call(tc,1-turnp,POS_FACEUP_REST,LOCATION_MZONE,bit.lshift(0x1,5))
-	end
+	Duel.Call(tc,1-turnp,POS_FACEUP_REST,LOCATION_MZONE,bit.lshift(0x1,5))
 	--add shield
-	local e1=Effect.CreateEffect(d)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_POWER)
+	local e1=aux.AddTempEffectUpdatePower(d,d,tc:GetShield(),RESET_PHASE+PHASE_DAMAGE)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-	e1:SetValue(tc:GetShield())
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
-	d:RegisterEffect(e1)
 end
 --drive step
 function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
@@ -274,16 +264,15 @@ function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
 		local e1=Effect.GlobalEffect()
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_DAMAGE_STEP_END)
-		e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+		e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 		e1:SetLabelObject(tc)
 		e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
-			local c=e:GetLabelObject()
-			c:SetStatus(STATUS_DRIVE_CHECK,false)
+			e:GetLabelObject():SetStatus(STATUS_DRIVE_CHECK,false)
 		end)
 		e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
 		Duel.RegisterEffect(e1,0)
 		--raise event for "When this unit's drive check reveals"
-		Duel.RaiseSingleEvent(Duel.GetAttacker(),EVENT_CUSTOM+EVENT_DRIVE_CHECK,Effect.GlobalEffect(),0,0,0,0)
+		Duel.RaiseSingleEvent(a,EVENT_CUSTOM+EVENT_DRIVE_CHECK,e,0,0,0,0)
 	end
 end
 --retire guardians
@@ -330,7 +319,7 @@ function Rule.TriggerCheckOperation(e,tp,eg,ep,ev,re,r,rp)
 				e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
 				Duel.RegisterEffect(e1,0)
 			else
-				if aux.TriggerZoneFilter(c) then Duel.HintSelection(Group.FromCards(c)) end
+				if c:IsLocation(LOCATION_REMOVED) then Duel.HintSelection(Group.FromCards(c)) end
 				Rule.move_trigger_unit(c)
 			end
 			c:RegisterFlagEffect(10000002,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE,0,1)
@@ -347,8 +336,8 @@ function Rule.move_trigger_unit(c)
 end
 --set lp
 function Rule.SetLPOperation(e,tp,eg,ep,ev,re,r,rp)
-	local ct1=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(nil),PLAYER_ONE,LOCATION_REMOVED,0,nil)
-	local ct2=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(nil),PLAYER_TWO,LOCATION_REMOVED,0,nil)
+	local ct1=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(),PLAYER_ONE,LOCATION_REMOVED,0,nil)
+	local ct2=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(),PLAYER_TWO,LOCATION_REMOVED,0,nil)
 	if Duel.GetLP(PLAYER_ONE)~=6-ct1 then Duel.SetLP(PLAYER_ONE,6-ct1) end
 	if Duel.GetLP(PLAYER_TWO)~=6-ct2 then Duel.SetLP(PLAYER_TWO,6-ct2) end
 end
@@ -506,7 +495,8 @@ end
 function Rule.DestroyOperation(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
-	if not a or not a:IsLocation(LOCATION_MZONE) or not d or not d:IsLocation(LOCATION_MZONE) or not d:IsDefensePos() then return end
+	if not a or not a:IsLocation(LOCATION_MZONE+LOCATION_SZONE)
+		or not d or not d:IsLocation(LOCATION_MZONE+LOCATION_SZONE) or not d:IsDefensePos() then return end
 	local ef1=a:IsHasEffect(EFFECT_INDESTRUCTIBLE) or a:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local ef2=d:IsHasEffect(EFFECT_INDESTRUCTIBLE) or d:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local g=Group.CreateGroup()

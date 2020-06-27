@@ -319,12 +319,7 @@ function Auxiliary.CriticalTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if not (tc and tc:IsRelateToEffect(e)) then return end
 	--gain power
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_POWER)
-	e1:SetValue(5000)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	tc:RegisterEffect(e1)
+	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--gain critical
 	local e2=Effect.CreateEffect(e:GetHandler())
 	e2:SetType(EFFECT_TYPE_SINGLE)
@@ -347,12 +342,7 @@ function Auxiliary.HealTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if not (tc and tc:IsRelateToEffect(e)) then return end
 	--gain power
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_POWER)
-	e1:SetValue(5000)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	tc:RegisterEffect(e1)
+	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--drop
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DROP)
 	local g=Duel.SelectMatchingCard(tp,Auxiliary.DamageZoneFilter(Auxiliary.HealTriggerFilter),tp,LOCATION_REMOVED,0,1,1,nil,e)
@@ -366,12 +356,7 @@ function Auxiliary.DrawTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if not (tc and tc:IsRelateToEffect(e)) then return end
 	--gain power
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_POWER)
-	e1:SetValue(5000)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	tc:RegisterEffect(e1)
+	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--draw
 	Duel.Draw(tp,1,REASON_EFFECT)
 end
@@ -384,12 +369,7 @@ function Auxiliary.StandTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if not (tc and tc:IsRelateToEffect(e)) then return end
 	--gain power
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_UPDATE_POWER)
-	e1:SetValue(5000)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	tc:RegisterEffect(e1)
+	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--stand
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_STAND)
 	local g=Duel.SelectMatchingCard(tp,Auxiliary.StandTriggerFilter,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,1,nil,e)
@@ -399,9 +379,8 @@ function Auxiliary.StandTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 end
 
 --add an ability to a card
---e.g. "Crimson Butterfly, Brigitte" (TD01/001)
+--code: EFFECT_TWIN_DRIVE for "Twin Drive!!" (e.g. "Crimson Butterfly, Brigitte" TD01/001)
 function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,val)
-	--code: EFFECT_TWIN_DRIVE, etc.
 	--s_range: the location of your card to provide the effect to
 	--o_range: the location of your opponent's card to provide the effect to
 	local e1=Effect.CreateEffect(c)
@@ -421,12 +400,11 @@ function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,
 	return e1
 end
 --add a temporary ability to a card
---e.g. "Solitary Knight, Gancelot" (TD01/003)
+--code: EFFECT_UPDATE_CRITICAL for "[Critical]+N" (e.g. "Solitary Knight, Gancelot" TD01/003)
 function Auxiliary.AddTempEffectCustom(c,tc,desc_id,code,val,reset_flag,reset_count)
 	--c: the card that adds the ability
 	--tc: the card to add the ability to
 	--desc_id: the id of the ability's text (0-15)
-	--code: EFFECT_UPDATE_CRITICAL, etc.
 	reset_flag=reset_flag or 0
 	if tc==c then reset_flag=reset_flag+RESET_DISABLE end
 	reset_count=reset_count or 1
@@ -543,10 +521,12 @@ function Auxiliary.EnableIntercept(c)
 	e1:SetTarget(Auxiliary.HintTarget)
 	e1:SetOperation(Auxiliary.InterceptOperation)
 	c:RegisterEffect(e1)
+	Auxiliary.EnableEffectCustom(c,EFFECT_INTERCEPT)
 end
 function Auxiliary.InterceptCondition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return Duel.GetTurnPlayer()~=tp and Duel.GetAttackTarget()~=c and c:IsFrontRow() and c:IsRearGuard()
+	return c:IsHasEffect(EFFECT_INTERCEPT) and c:IsFrontRow() and c:IsRearGuard()
+		and Duel.GetAttackTarget()~=c and Duel.GetTurnPlayer()~=tp
 end
 function Auxiliary.InterceptOperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -570,11 +550,13 @@ function Auxiliary.EnableBoost(c)
 	e1:SetTarget(Auxiliary.HintTarget)
 	e1:SetOperation(Auxiliary.BoostOperation)
 	c:RegisterEffect(e1)
+	Auxiliary.EnableEffectCustom(c,EFFECT_BOOST)
 end
 function Auxiliary.BoostCondition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local g=c:GetColumnGroup()
-	return c:IsBackRow() and g:IsContains(Duel.GetAttacker()) and eg:GetFirst():GetControler()~=tp
+	return c:IsHasEffect(EFFECT_BOOST) and c:IsBackRow()
+		and g:IsContains(Duel.GetAttacker()) and eg:GetFirst():GetControler()~=tp
 end
 function Auxiliary.BoostOperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
@@ -597,6 +579,9 @@ function Auxiliary.BoostOperation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
 	Duel.RegisterEffect(e1,0)
 end
+function Auxiliary.IsBoostingState(e)
+	return e:GetHandler():IsStatus(STATUS_BOOSTING)
+end
 
 --condition function for "(VC)"
 --e.g. "Crimson Butterfly, Brigitte" (TD01/001), "Solitary Knight, Gancelot" (TD01/003)
@@ -614,11 +599,6 @@ function Auxiliary.AttackHitCondition(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
 	return a and d and a:GetPower()>=d:GetPower()
-end
---condition function to check if a card is boosting
---e.g. "Flame of Hope, Aermo" (TD02/009)
-function Auxiliary.IsBoostingState(e)
-	return e:GetHandler():IsStatus(STATUS_BOOSTING)
 end
 --cost function for "[Counter Blast (N)]"
 --e.g. "Knight of Conviction, Bors" (TD01/002)
@@ -653,6 +633,7 @@ end
 function Auxiliary.DiscardCost(min,max,f,...)
 	--min,max: the number of cards to discard (nil to discard all cards)
 	--f: filter function if the card is specified
+	local ext_params={...}
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
 				local minc=min or 1
 				local maxc=max or minc
@@ -761,12 +742,6 @@ function Auxiliary.DamageZoneFilter(f)
 				return target:IsLocation(LOCATION_REMOVED) and target:IsReason(REASON_DAMAGE)
 					and (not f or f(target,...))
 			end
-end
---flag effect for spell counter
-function Auxiliary.chainreg(e,tp,eg,ep,ev,re,r,rp)
-	if e:GetHandler():GetFlagEffect(1)==0 then
-		e:GetHandler():RegisterFlagEffect(1,RESET_EVENT+RESETS_STANDARD-RESET_TURN_SET+RESET_CHAIN,0,1)
-	end
 end
 --
 function loadutility(file)

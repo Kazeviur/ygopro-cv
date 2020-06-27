@@ -609,8 +609,10 @@ EFFECT_REMOVE_LINKMARKER			=424	--(unused)
 EFFECT_CHANGE_LINKMARKER			=425	--(unused)
 --The following is only available in YGOPro CV
 EFFECT_REST_MODE					=500	--Workaround to [Rest] a card in LOCATION_SZONE ("Little Sage, Marron" TD01/008)
-EFFECT_TWIN_DRIVE					=600	--Twin Drive!! ("Crimson Butterfly, Brigitte" TD01/001)
+EFFECT_TWIN_DRIVE					=600	--Twin Drive!! skill icon ("Crimson Butterfly, Brigitte" TD01/001)
 EFFECT_UPDATE_CRITICAL				=601	--Increase/decrease [Critical] ("Solitary Knight, Gancelot" TD01/003)
+EFFECT_INTERCEPT					=602	--Intercept skill icon ("Knight of Silence, Gallatin" TD01/004)
+EFFECT_BOOST						=603	--Boost skill icon ("Little Sage, Marron" TD01/008)
 --Event Code
 --Events that can be used as a trigger for Trigger Effects
 EVENT_STARTUP					=1000	--(unused)
