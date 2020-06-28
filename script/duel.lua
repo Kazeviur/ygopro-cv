@@ -66,7 +66,7 @@ function Duel.MoveToField(c,move_player,target_player,dest,pos,enabled,zone)
 	return res
 end
 --swap two cards on the field
---Note: Overwritten to swap a card in LOCATION_MZONE with a card in LOCATION_SZONE and vice-versa
+--Note: Overwritten to swap a card in LOCATION_MZONE with a card in LOCATION_SZONE and vice versa
 local duel_swap_sequence=Duel.SwapSequence
 function Duel.SwapSequence(c1,c2)
 	local cp1=c1:GetControler()
