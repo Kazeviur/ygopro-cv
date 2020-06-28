@@ -28,7 +28,7 @@ function Duel.ChangePosition(targets,pos)
 		if tc:IsLocation(LOCATION_REMOVED) then
 			Duel.DisableShuffleCheck()
 			Duel.SendtoHand(tc,PLAYER_OWNER,REASON_RULE)
-			Duel.Remove(tc,pos,REASON_RULE)
+			Duel.Remove(tc,pos,REASON_DAMAGE+REASON_RULE)
 		elseif tc:IsLocation(LOCATION_SZONE) then
 			if pos==POS_FACEUP_REST then
 				--workaround to [Rest] a card in LOCATION_SZONE
