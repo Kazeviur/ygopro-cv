@@ -14,7 +14,7 @@ If you do not build your deck according to the following rules, you will lose th
 3. Choose a [grade](https://cardfight.fandom.com/wiki/Card_Mechanics) 0 card from your main deck and put it face down on your vanguard circle (VC) as your "[first vanguard](https://cardfight.fandom.com/wiki/First_Vanguard)".<br>
 4. Shuffle your deck and [draw](https://cardfight.fandom.com/wiki/Specific_Actions#Draw) 5 cards. Then, you have 1 chance to choose any number of cards from your hand, put them on the bottom of your deck, draw the same number of cards, then [shuffle](https://cardfight.fandom.com/wiki/Specific_Actions#Shuffle) your deck if you returned any cards.<br>
 5. Both players simultaneously turn their first vanguards face up.
-6. During your [Stand Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Stand_Phase), turn all of your units from [Rest](https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest) to [Stand]((https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest)).
+6. During your [Stand Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Stand_Phase), turn all of your units from [Rest](https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest) to [Stand](https://cardfight.fandom.com/wiki/Specific_Actions#Stand_and_Rest).
 7. During your [Draw Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Draw_Phase), draw 1 card.
 8. During your [Ride Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Ride_Phase), you may [ride](https://cardfight.fandom.com/wiki/Ride) once. Choose a unit from your hand whose grade is one greater than or equal to your current vanguard's grade, and [place](https://cardfight.fandom.com/wiki/Specific_Actions#Place) it on your (VC) as [Stand]. This is called a "normal ride".<br>
 9. During your [Main Phase](https://cardfight.fandom.com/wiki/Standard_Fight_Rules#Main_Phase), you may do the following actions in any order and as many times as you want:<br>
@@ -72,11 +72,12 @@ If you do not build your deck according to the following rules, you will lose th
 - `0x5	Monster+Trap` = Trigger unit
 - `0x20	Effect` = Critical
 - `0x80	Ritual` = Heal
-- `0x200	Spirit` = Draw
-- `0x400	Union` = Stand
+- `0x100	Trap Monster` = Draw
+- `0x200	Union` = Stand
 	- `Level` = Grade
 	- `ATK` = Power
 	- `DEF` = Shield
+- `0x1000	Tuner` = Card that has no ability
 </details>
 <details>
 <summary>Attribute</summary>
