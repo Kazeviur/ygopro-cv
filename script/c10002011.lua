@@ -7,17 +7,17 @@ function scard.initial_effect(c)
 	aux.EnableUnitAttribute(c)
 	--skill icon (boost)
 	aux.EnableBoost(c)
-	--get effect
+	--gain effect
 	aux.AddSingleAutoEffect(c,0,EVENT_CUSTOM+EVENT_BOOST,nil,scard.op1,nil,scard.con1)
 end
---get effect
-function scard.con1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetAttacker()
-	return tc and tc:IsCode(CARD_WYVERN_STRIKE_TEJAS)
-end
+--gain effect
+scard.con1=aux.AttackerCondition(Card.IsCode,CARD_WYVERN_STRIKE_TEJAS)
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	--gain power
 	aux.AddTempEffectUpdatePower(c,Duel.GetAttacker(),4000,RESET_PHASE+PHASE_DAMAGE)
 end
+--[[
+	Note: This card's [AUTO] effect is similar to that of "Wingal".
+]]

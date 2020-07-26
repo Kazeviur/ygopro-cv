@@ -48,8 +48,8 @@
 ### [2012](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=6)
 
 - **March 3, 2012** : Booster Pack | BT02 Onslaught of Dragon Souls : `11002XXX`
-- **May 12, 2012** : Trial Deck | TD05 Slash of the Silver Wolf : `10005XXX`
-- **May 12, 2012** : Trial Deck | TD06 Resonance of Thunder Dragon : `10006XXX`
+- ~**May 12, 2012** : Trial Deck | TD05 Slash of the Silver Wolf : `10005XXX`~
+- ~**May 12, 2012** : Trial Deck | TD06 Resonance of Thunder Dragon : `10006XXX`~
 - **May 19, 2012** : Booster Pack | BT06 Breaker of Limits : `11006XXX`
 - **July 7, 2012** : Extra Booster Pack | EB03 Cavalry of Black Steel : `12003XXX`
 - **August 11, 2012** : Booster Pack | BT03 Demonic Lord Invasion : `11003XXX`
@@ -59,8 +59,8 @@
 
 ### [2013](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=16)
 
-- **January 25, 2013** : Trial Deck | TD03 Golden Mechanical Soldier : `10003XXX`
-- **January 25, 2013** : Trial Deck | TD04 Maiden Princess of the Cherry Blossoms : `10004XXX`
+- ~**January 25, 2013** : Trial Deck | TD03 Golden Mechanical Soldier : `10003XXX`~
+- ~**January 25, 2013** : Trial Deck | TD04 Maiden Princess of the Cherry Blossoms : `10004XXX`~
 - **February 22, 2013** : Booster Pack | BT05 Awakening of Twin Blades : `11005XXX`
 - **March 29, 2013** : Extra Booster Pack | EB01 Comic Style Vol. 1 : `12001XXX`
 - **April 19, 2013** : Trial Deck | TD07 Descendants of the Marine Emperor : `10007XXX`

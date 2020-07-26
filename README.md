@@ -124,23 +124,23 @@ If you do not build your deck according to the following rules, you will lose th
 - `0x1	Destroy Spell/Trap` = ～Reserved～
 - `0x2	Destroy Monster` = Retire a card
 - `0x4	Banish Card` = ～Reserved～
-- `0x8	Send to Graveyard` = ～Reserved～
-- `0x10	Return to Hand` = ～Reserved～
+- `0x8	Send to Graveyard` = Put a card into the drop zone
+- `0x10	Return to Hand` = Return a card to a player's hand
 - `0x20	Return to Deck` = Put a card into a player's deck
 - `0x40	Destroy Hand` = Discard a card from a player's hand
 - `0x80	Destroy Deck` = ～Reserved～
 - `0x100	Increase Draw` = Draw a card from the deck
 - `0x200	Search Deck` = Look at a player's deck
 - `0x400	GY to Hand/Field` = ～Reserved～
-- `0x800	Change Battle Position` = Turn a card from [Stand] to [Rest], or vice-versa
+- `0x800	Change Battle Position` = Turn a card from [Stand] to [Rest], or vice versa
 - `0x1000	Get Control` = ～Reserved～
-- `0x2000	Increase/Decrease ATK/DEF` = Increase or decrease a card's Power
+- `0x2000	Increase/Decrease ATK/DEF` = Increase or decrease a card's [Power] or [Shield]
 - `0x4000	Piercing` = Give a card [Critical]
 - `0x8000	Attack Multiple Times` = ～Reserved～
-- `0x10000	Limit Attack` = ～Reserved～
+- `0x10000	Limit Attack` = Cannot attack
 - `0x20000	Direct Attack` = ～Reserved～
 - `0x40000	Special Summon` = Ride a card
-- `0x80000	Token` = ～Reserved～
+- `0x80000	Token` = Call a card
 - `0x100000	Type-related` = ～Reserved～
 - `0x200000	Attribute-related` = Lists "clan" or a particular clan in the card's text
 - `0x400000	Reduce LP` = ～Reserved～
@@ -151,7 +151,7 @@ If you do not build your deck according to the following rules, you will lose th
 - `0x8000000	Gamble` = ～Reserved～
 - `0x10000000	Fusion` = ～Reserved～
 - `0x20000000	Synchro` = ～Reserved～
-- `0x40000000	Xyz` = ～Reserved～
+- `0x40000000	Xyz` = Soul Charge
 - `0x80000000	Negate Effect` = ～Reserved～
 </details>
 <details>

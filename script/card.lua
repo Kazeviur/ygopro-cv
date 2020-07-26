@@ -163,13 +163,25 @@ function Card.IsSequenceAbove(c,seq)
 	return c:GetSequence()>=seq
 end
 --check if a card is a vanguard
-function Card.IsVanguard(c)
-	return c:IsLocation(LOCATION_MZONE) and c:IsSequence(2)
+function Card.IsVanguard(c,player)
+	--player: the player whose vanguard it is
+	if not c:IsLocation(LOCATION_MZONE) or not c:IsSequence(2) then return false end
+	if player then
+		return c:IsControler(player)
+	else
+		return true
+	end
 end
 --check if a card is a rear-guard
-function Card.IsRearGuard(c)
+function Card.IsRearGuard(c,player)
+	--player: the player whose rear-guard it is
 	if c:IsLocation(LOCATION_MZONE) and c:IsSequence(2) then return false end
-	return c:IsLocation(LOCATION_MZONE+LOCATION_SZONE)
+	if not c:IsLocation(LOCATION_ONFIELD) then return false end
+	if player then
+		return c:IsControler(player)
+	else
+		return true
+	end
 end
 --check if a card is in the front row
 function Card.IsFrontRow(c)
@@ -178,6 +190,16 @@ end
 --check if a card is in the back row
 function Card.IsBackRow(c)
 	return c:IsLocation(LOCATION_SZONE) and c:IsSequenceAbove(1) and c:IsSequenceBelow(3)
+end
+--check if a card is a guardian
+function Card.IsGuardian(c,player)
+	--player: the player whose guardian it is
+	if not c:IsLocation(LOCATION_MZONE) or c:IsSequenceBelow(4) then return false end
+	if player then
+		return c:IsControler(player)
+	else
+		return true
+	end
 end
 --check if a card is attacking
 function Card.IsAttacker(c)

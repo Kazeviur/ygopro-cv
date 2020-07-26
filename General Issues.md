@@ -32,3 +32,7 @@ For example: _(You may only have up to four cards with "HEAL" in a deck.)_
 ## Card Effects
 - [ ] **You don't always look through your entire deck when you take a card from it**
 - If you're required to take a specific card from your deck, the game will only show you the relevant cards.
+- [ ] **You can't attack a card in the back row (RC)**
+- For example: _If this unit would attack, it may instead attack an opponent's unit in the back row._
+- [ ] **_When another card rides this unit_ doesn't trigger**
+- This effect only works as a continuous effect.

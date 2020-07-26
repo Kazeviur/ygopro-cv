@@ -186,7 +186,7 @@ function Auxiliary.MergeCost(...)
 			end
 end
 
---unit rules
+--unit
 function Auxiliary.EnableUnitAttribute(c)
 	--register card info
 	Auxiliary.RegisterCardInfo(c)
@@ -197,7 +197,7 @@ function Auxiliary.EnableUnitAttribute(c)
 	e1:SetDescription(DESC_MOVE)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-	e1:SetRange(LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetRange(LOCATION_ONFIELD)
 	e1:SetCondition(Auxiliary.RCCondition)
 	e1:SetTarget(Auxiliary.MoveTarget)
 	e1:SetOperation(Auxiliary.MoveOperation)
@@ -255,7 +255,7 @@ function Auxiliary.MoveFilter(c,g)
 end
 function Auxiliary.MoveTarget(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=e:GetHandler():GetColumnGroup()
-	if chk==0 then return Duel.IsExistingMatchingCard(Auxiliary.MoveFilter,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,nil,g) end
+	if chk==0 then return Duel.IsExistingMatchingCard(Auxiliary.MoveFilter,tp,LOCATION_ONFIELD,0,1,nil,g) end
 	Duel.SetChainLimit(aux.FALSE)
 end
 function Auxiliary.MoveOperation(e,tp,eg,ep,ev,re,r,rp)
@@ -263,9 +263,10 @@ function Auxiliary.MoveOperation(e,tp,eg,ep,ev,re,r,rp)
 	local g=c:GetColumnGroup()
 	if not c:IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOCIRCLE)
-	local sg=Duel.SelectMatchingCard(tp,Auxiliary.MoveFilter,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,1,Duel.GetVanguard(tp),g)
-	if sg:GetCount()==0 then return end
-	Duel.SwapSequence(c,sg:GetFirst())
+	local sg=Duel.SelectMatchingCard(tp,Auxiliary.MoveFilter,tp,LOCATION_ONFIELD,0,1,1,Duel.GetVanguard(tp),g)
+	if sg:GetCount()>0 then
+		Duel.SwapSequence(c,sg:GetFirst())
+	end
 end
 --trigger unit
 function Auxiliary.EnableTriggerUnit(c)
@@ -304,14 +305,14 @@ function Auxiliary.TriggerUnitFilter(c,clan)
 end
 function Auxiliary.TriggerUnitCondition(e,tp,eg,ep,ev,re,r,rp)
 	local clan=e:GetHandler():GetClan()
-	return Duel.IsExistingMatchingCard(Auxiliary.TriggerUnitFilter,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,nil,clan)
+	return Duel.IsExistingMatchingCard(Auxiliary.TriggerUnitFilter,tp,LOCATION_ONFIELD,0,1,nil,clan)
 end
 function Auxiliary.TriggerUnitTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return false end
 	if chk==0 then return true end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_GAINPOWER)
-	Duel.SelectTarget(tp,Card.IsFaceup,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,1,nil)
+	Duel.SelectTarget(tp,Card.IsFaceup,tp,LOCATION_ONFIELD,0,1,1,nil)
 end
 --"Critical Trigger"
 --e.g. "Bringer of Good Luck, Epona" (TD01/013)
@@ -346,9 +347,10 @@ function Auxiliary.HealTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	--drop
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DROP)
 	local g=Duel.SelectMatchingCard(tp,Auxiliary.DamageZoneFilter(Auxiliary.HealTriggerFilter),tp,LOCATION_REMOVED,0,1,1,nil,e)
-	if g:GetCount()==0 then return end
-	Duel.SetTargetCard(g)
-	Duel.SendtoDrop(g,REASON_EFFECT)
+	if g:GetCount()>0 then
+		Duel.SetTargetCard(g)
+		Duel.SendtoDrop(g,REASON_EFFECT)
+	end
 end
 --"Draw Trigger"
 --e.g. "Weapons Dealer, Govannon" (TD01/015)
@@ -372,13 +374,14 @@ function Auxiliary.StandTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--stand
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_STAND)
-	local g=Duel.SelectMatchingCard(tp,Auxiliary.StandTriggerFilter,tp,LOCATION_MZONE+LOCATION_SZONE,0,1,1,nil,e)
-	if g:GetCount()==0 then return end
-	Duel.SetTargetCard(g)
-	Duel.ChangePosition(g,POS_FACEUP_STAND)
+	local g=Duel.SelectMatchingCard(tp,Auxiliary.StandTriggerFilter,tp,LOCATION_ONFIELD,0,1,1,nil,e)
+	if g:GetCount()>0 then
+		Duel.SetTargetCard(g)
+		Duel.ChangePosition(g,POS_FACEUP_STAND)
+	end
 end
 
---add an ability to a card
+--add an effect to a card
 --code: EFFECT_TWIN_DRIVE for "Twin Drive!!" (e.g. "Crimson Butterfly, Brigitte" TD01/001)
 function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,val)
 	--s_range: the location of your card to provide the effect to
@@ -386,7 +389,7 @@ function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,
 	local e1=Effect.CreateEffect(c)
 	if s_range or o_range then
 		e1:SetType(EFFECT_TYPE_FIELD)
-		e1:SetRange(LOCATION_MZONE+LOCATION_SZONE)
+		e1:SetRange(LOCATION_ONFIELD)
 		e1:SetTargetRange(s_range,o_range)
 		if targ_func then e1:SetTarget(targ_func) end
 	else
@@ -399,12 +402,12 @@ function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,
 	c:RegisterEffect(e1)
 	return e1
 end
---add a temporary ability to a card
+--add a temporary effect to a card
 --code: EFFECT_UPDATE_CRITICAL for "[Critical]+N" (e.g. "Solitary Knight, Gancelot" TD01/003)
 function Auxiliary.AddTempEffectCustom(c,tc,desc_id,code,val,reset_flag,reset_count)
-	--c: the card that adds the ability
-	--tc: the card to add the ability to
-	--desc_id: the id of the ability's text (0-15)
+	--c: the card that adds the effect
+	--tc: the card to add the effect to
+	--desc_id: the id of the effect's text (0-15)
 	reset_flag=reset_flag or 0
 	if tc==c then reset_flag=reset_flag+RESET_DISABLE end
 	reset_count=reset_count or 1
@@ -418,13 +421,15 @@ function Auxiliary.AddTempEffectCustom(c,tc,desc_id,code,val,reset_flag,reset_co
 	tc:RegisterEffect(e1)
 	return e1
 end
---EFFECT_TYPE_SINGLE Automatic [AUTO] abilities
+--EFFECT_TYPE_SINGLE Automatic [AUTO] effects
 --code: EVENT_DRIVE_CHECK for "[AUTO]:When this unit's drive check reveals" (e.g. "Crimson Butterfly, Brigitte" TD01/001)
 --code: EVENT_ATTACK_ANNOUNCE for "[AUTO]:When this unit attacks" (e.g. "Knight of Conviction, Bors" TD01/002)
 --code: EVENT_PLACED_VC for "[AUTO]:When this unit is placed on (VC)" (e.g. "Blaster Blade" TD01/005)
 --code: EVENT_BOOST for "[AUTO]:When this unit boosts a card" (e.g. "Wingal" TD01/009)
 --code: EVENT_PLACED_RC for "[AUTO]:When this unit is placed on (RC)" (e.g. "Starlight Unicorn" TD01/010)
 --code: EVENT_DAMAGE_STEP_END for "[AUTO]:When this unit's attack hits" (e.g. "Dragonic Overlord" TD02/001)
+--code: EVENT_INTERCEPT for "[AUTO]:When this unit intercepts" (e.g. "NGM Prototype" TD03/006)
+--code: EVENT_BE_RIDE for "[AUTO]:When another unit rides this unit" (e.g. "Battleraizer" TD03/015)
 function Auxiliary.AddSingleAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,cost_func)
 	prop=prop or 0
 	local typ=cost_func and EFFECT_TYPE_TRIGGER_O or EFFECT_TYPE_TRIGGER_F
@@ -433,7 +438,7 @@ function Auxiliary.AddSingleAutoEffect(c,desc_id,code,targ_func,op_func,prop,con
 	e1:SetType(EFFECT_TYPE_SINGLE+typ)
 	e1:SetCode(code)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL+EFFECT_FLAG_DELAY+prop)
-	e1:SetRange(LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetRange(LOCATION_ONFIELD)
 	if con_func then e1:SetCondition(con_func) end
 	if cost_func then e1:SetCost(cost_func) end
 	if targ_func then e1:SetTarget(targ_func) end
@@ -441,10 +446,12 @@ function Auxiliary.AddSingleAutoEffect(c,desc_id,code,targ_func,op_func,prop,con
 	c:RegisterEffect(e1)
 	return e1
 end
---EFFECT_TYPE_FIELD Automatic [AUTO] abilities
+--EFFECT_TYPE_FIELD Automatic [AUTO] effects
 --code: EVENT_DAMAGE_STEP_END for "[AUTO]:When an attack hits" (e.g. "Flame of Hope, Aermo" TD02/009)
 --code: EVENT_TO_GRAVE for "[AUTO]:When a card is put into the drop zone" (e.g. "Demonic Dragon Madonna, Joka" TD02/010)
 --code: EVENT_TO_GRAVE for "[AUTO]:When a rear-guard is retired" (e.g. "Demonic Dragon Mage, Rakshasa" TD02/016)
+--code: EVENT_MAIN_PHASE_START for "[AUTO]:At the beginning of your main phase" (e.g. "Mr. Invincible" TD03/003)
+--code: EVENT_DRAW for "[AUTO]:When you draw a card" (e.g. "Sword Dancer Angel" TD04/006)
 function Auxiliary.AddAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,cost_func)
 	prop=prop or 0
 	local typ=cost_func and EFFECT_TYPE_TRIGGER_O or EFFECT_TYPE_TRIGGER_F
@@ -453,7 +460,7 @@ function Auxiliary.AddAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,
 	e1:SetType(EFFECT_TYPE_FIELD+typ)
 	e1:SetCode(code)
 	e1:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DAMAGE_CAL+EFFECT_FLAG_DELAY+prop)
-	e1:SetRange(LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetRange(LOCATION_ONFIELD)
 	if con_func then e1:SetCondition(con_func) end
 	if cost_func then e1:SetCost(cost_func) end
 	if targ_func then e1:SetTarget(targ_func) end
@@ -461,7 +468,7 @@ function Auxiliary.AddAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,
 	c:RegisterEffect(e1)
 	return e1
 end
---Activated [ACT] abilities
+--Activated [ACT] effects
 --e.g. "Solitary Knight, Gancelot" (TD01/003)
 function Auxiliary.AddActivatedEffect(c,desc_id,range,con_func,cost_func,op_func,prop,targ_func)
 	local e1=Effect.CreateEffect(c)
@@ -508,6 +515,19 @@ function Auxiliary.AddTempEffectUpdatePower(c,tc,val,reset_flag,reset_count)
 	tc:RegisterEffect(e1)
 	return e1
 end
+--e.g. "NGM Prototype" (TD03/006)
+function Auxiliary.AddTempEffectUpdateShield(c,tc,val,reset_flag,reset_count)
+	reset_flag=reset_flag or 0
+	if tc==c then reset_flag=reset_flag+RESET_DISABLE end
+	reset_count=reset_count or 1
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_UPDATE_SHIELD)
+	e1:SetValue(val)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD+reset_flag,reset_count)
+	tc:RegisterEffect(e1)
+	return e1
+end
 --"Intercept"
 --e.g. "Knight of Silence, Gallatin" (TD01/001)
 function Auxiliary.EnableIntercept(c)
@@ -518,7 +538,7 @@ function Auxiliary.EnableIntercept(c)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCondition(Auxiliary.InterceptCondition)
-	e1:SetTarget(Auxiliary.HintTarget)
+	e1:SetTarget(Auxiliary.InterceptTarget)
 	e1:SetOperation(Auxiliary.InterceptOperation)
 	c:RegisterEffect(e1)
 	Auxiliary.EnableEffectCustom(c,EFFECT_INTERCEPT)
@@ -528,13 +548,17 @@ function Auxiliary.InterceptCondition(e,tp,eg,ep,ev,re,r,rp)
 	return c:IsHasEffect(EFFECT_INTERCEPT) and c:IsFrontRow() and c:IsRearGuard()
 		and Duel.GetAttackTarget()~=c and Duel.GetTurnPlayer()~=tp
 end
+function Auxiliary.InterceptTarget(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return not Duel.GetGuardian(tp) end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+end
 function Auxiliary.InterceptOperation(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	Duel.MoveSequence(c,5)
 	Duel.ChangePosition(c,POS_FACEUP_REST)
-	--add shield
-	Auxiliary.AddTempEffectUpdatePower(c,Duel.GetAttackTarget(),c:GetShield(),RESET_PHASE+PHASE_DAMAGE)
+	--raise event for "When this unit intercepts"
+	Duel.RaiseSingleEvent(c,EVENT_CUSTOM+EVENT_INTERCEPT,e,0,0,0,0)
 end
 --"Boost"
 --e.g. "Little Sage, Marron" (TD01/008)
@@ -583,8 +607,23 @@ function Auxiliary.IsBoostingState(e)
 	return e:GetHandler():IsStatus(STATUS_BOOSTING)
 end
 
+--condition to check who the turn player is
+function Auxiliary.TurnPlayerCondition(p)
+	return	function(e)
+				local tp=e:GetHandlerPlayer()
+				local player=(p==PLAYER_SELF and tp) or (p==PLAYER_OPPO and 1-tp)
+				return Duel.GetTurnPlayer()==player
+			end
+end
+--condition to check who the event player is
+function Auxiliary.EventPlayerCondition(p)
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local player=(p==PLAYER_SELF and tp) or (p==PLAYER_OPPO and 1-tp)
+				return ep==player
+			end
+end
 --condition function for "(VC)"
---e.g. "Crimson Butterfly, Brigitte" (TD01/001), "Solitary Knight, Gancelot" (TD01/003)
+--e.g. "Crimson Butterfly, Brigitte" (TD01/001)
 function Auxiliary.VCCondition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsVanguard()
 end
@@ -593,20 +632,77 @@ end
 function Auxiliary.RCCondition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsRearGuard()
 end
---condition function for "When an attack hits" + EVENT_DAMAGE_STEP_END
+--condition function for "When this unit's drive check reveals"
+--e.g. "Crimson Butterfly, Brigitte" (TD01/001)
+function Auxiliary.DriveCheckCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				return Duel.GetDriveCheckGroup():IsExists(f,1,nil,table.unpack(ext_params))
+			end
+end
+--condition function to check your vanguard
+--e.g. "Blaster Blade" (TD01/005)
+function Auxiliary.SelfVanguardCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local tc=Duel.GetVanguard(e:GetHandlerPlayer())
+				return tc and tc:IsFaceup() and (not f or f(tc,table.unpack(ext_params)))
+			end
+end
+--condition function to check the attacking card
+--e.g. "Wingal" (TD01/009)
+function Auxiliary.AttackerCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local a=Duel.GetAttacker()
+				return a and (not f or f(a,table.unpack(ext_params)))
+			end
+end
+--condition function to check the attacked card
+--e.g. "Great Silver Wolf, Garmore" (TD05/001)
+function Auxiliary.AttackTargetCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local d=Duel.GetAttackTarget()
+				return d and (not f or f(d,table.unpack(ext_params)))
+			end
+end
+--condition function for "When this unit's attack hits" + EVENT_DAMAGE_STEP_END
 --e.g. "Dragonic Overlord" (TD02/001)
-function Auxiliary.AttackHitCondition(e,tp,eg,ep,ev,re,r,rp)
-	local a=Duel.GetAttacker()
-	local d=Duel.GetAttackTarget()
-	return a and d and a:GetPower()>=d:GetPower()
+function Auxiliary.SelfAttackHitCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local a=Duel.GetAttacker()
+				local d=Duel.GetAttackTarget()
+				if not e:GetHandler():IsAttacker() then return false end
+				return a and d and a:GetPower()>=d:GetPower() and (not f or f(d,table.unpack(ext_params)))
+			end
+end
+--condition function for "When an attack hits" + EVENT_DAMAGE_STEP_END
+--e.g. "Flame of Hope, Aermo" (TD02/009)
+function Auxiliary.AttackHitCondition(f,...)
+	local ext_params={...}
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				local a=Duel.GetAttacker()
+				local d=Duel.GetAttackTarget()
+				return a and d and a:GetPower()>=d:GetPower() and (not f or f(d,table.unpack(ext_params)))
+			end
+end
+--condition function for "Limit Break N (This ability is active if you have N or more damage)"
+--e.g. "Great Silver Wolf, Garmore" (TD05/001)
+function Auxiliary.LimitBreakCondition(ct)
+	return	function(e,tp,eg,ep,ev,re,r,rp)
+				return Duel.GetDamageCount(tp)>=ct
+			end
 end
 --cost function for "[Counter Blast (N)]"
 --e.g. "Knight of Conviction, Bors" (TD01/002)
 function Auxiliary.CounterBlastCost(ct)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
-				if chk==0 then return Duel.IsExistingMatchingCard(Auxiliary.DamageZoneFilter(Card.IsFaceup),tp,LOCATION_REMOVED,0,ct,nil) end
+				local f=Auxiliary.DamageZoneFilter(Card.IsFaceup)
+				if chk==0 then return Duel.IsExistingMatchingCard(f,tp,LOCATION_REMOVED,0,ct,nil) end
 				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FLIPOVER)
-				local g=Duel.SelectMatchingCard(tp,Auxiliary.DamageZoneFilter(Card.IsFaceup),tp,LOCATION_REMOVED,0,ct,ct,nil)
+				local g=Duel.SelectMatchingCard(tp,f,tp,LOCATION_REMOVED,0,ct,ct,nil)
 				Duel.ChangePosition(g,POS_FACEDOWN)
 			end
 end
@@ -662,6 +758,26 @@ function Auxiliary.DiscardCost(min,max,f,...)
 				end
 			end
 end
+--cost function for "[Soul Charge (N)]"
+--e.g. "Mr. Invincible" (TD03/003)
+function Auxiliary.SoulChargeCost(ct)
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
+				local g=Duel.GetDecktopGroup(tp,ct)
+				if chk==0 then return g:GetCount()>0 end
+				Duel.Overlay(e:GetHandler(),g)
+			end
+end
+--cost function for "[Soul Blast (N)]"
+--e.g. "Mr. Invincible" (TD03/003)
+function Auxiliary.SoulBlastCost(ct)
+	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
+				local g=Duel.GetVanguard(tp):GetSoul()
+				if chk==0 then return g:IsExists(Card.IsAbleToDrop,ct,nil) end
+				Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DROP)
+				local sg=g:Select(tp,ct,ct,nil)
+				Duel.SendtoDrop(sg,REASON_COST)
+			end
+end
 --target function for Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 function Auxiliary.HintTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if e:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then
@@ -670,7 +786,7 @@ function Auxiliary.HintTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return true end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
---target function for abilities that choose cards
+--target function for effects that target cards
 --e.g. "Starlight Unicorn" (TD01/010)
 function Auxiliary.TargetCardFunction(p,f,s,o,min,max,desc,ex,...)
 	local ext_params={...}
@@ -698,8 +814,9 @@ function Auxiliary.TargetCardFunction(p,f,s,o,min,max,desc,ex,...)
 				Duel.SelectTarget(player,f,tp,s,o,min,max,exg,e,tp,eg,ep,ev,re,r,rp,table.unpack(ext_params))
 			end
 end
---operation function for abilities that choose cards
+--operation function for effects that target cards
 --f: Duel.SendtoDrop to retire cards (e.g. "Blaster Blade" TD01/005)
+--f: Duel.ChangePosition to change positions (e.g. "Gold Rutile" TD03/001)
 function Auxiliary.TargetCardsOperation(f,...)
 	local ext_params={...}
 	return	function(e,tp,eg,ep,ev,re,r,rp)
@@ -709,7 +826,7 @@ function Auxiliary.TargetCardsOperation(f,...)
 				end
 			end
 end
---operation function for abilities that choose cards to increase/decrease their power
+--operation function for effects that target cards to increase/decrease their power
 --e.g. "Starlight Unicorn" (TD01/010)
 function Auxiliary.TargetUpdatePowerOperation(val,reset_flag,reset_count)
 	return	function(e,tp,eg,ep,ev,re,r,rp)
@@ -720,7 +837,7 @@ function Auxiliary.TargetUpdatePowerOperation(val,reset_flag,reset_count)
 				end
 			end
 end
---operation function for abilities that let a player (PLAYER_SELF or PLAYER_OPPO) do something
+--operation function for effects that let a player (PLAYER_SELF or PLAYER_OPPO) do something
 --f: Duel.Draw to let a player draw cards (e.g. "Dragon Monk, Gojo" TD02/008)
 function Auxiliary.DuelOperation(f,p,...)
 	local ext_params={...}
@@ -729,14 +846,14 @@ function Auxiliary.DuelOperation(f,p,...)
 				return f(player,table.unpack(ext_params))
 			end
 end
---filter to check if a card is in the trigger zone
+--filter for a card in the trigger zone
 function Auxiliary.TriggerZoneFilter(f)
 	return	function(target,...)
 				return target:IsLocation(LOCATION_REMOVED) and target:IsReason(REASON_TRIGGER)
 					and (not f or f(target,...))
 			end
 end
---filter to check if a card is in the damage zone
+--filter for a card in the damage zone
 function Auxiliary.DamageZoneFilter(f)
 	return	function(target,...)
 				return target:IsLocation(LOCATION_REMOVED) and target:IsReason(REASON_DAMAGE)

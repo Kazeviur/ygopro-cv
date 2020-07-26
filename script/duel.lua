@@ -8,7 +8,7 @@ function Duel.SelectMatchingCard(sel_player,f,player,s,o,min,max,ex,...)
 	end
 	return duel_select_matching_card(sel_player,f,player,s,o,min,max,ex,...)
 end
---choose a card
+--target a card
 --Note: Overwritten to notify a player if there are no cards to select
 local duel_select_target=Duel.SelectTarget
 function Duel.SelectTarget(sel_player,f,player,s,o,min,max,ex,...)
@@ -110,15 +110,20 @@ function Duel.GetVanguard(player)
 	return Duel.GetFirstMatchingCard(Card.IsSequence,player,LOCATION_MZONE,0,nil,2)
 end
 --get the guardians
+--Note: returns Card if player~=nil, otherwise returns Group
 function Duel.GetGuardian(player)
 	local f=function(c)
 		return c:IsSequence(5) or c:IsSequence(6)
 	end
 	if player then
-		return Duel.GetMatchingGroup(f,player,LOCATION_MZONE,0,nil)
+		return Duel.GetFirstMatchingCard(f,player,LOCATION_MZONE,0,nil)
 	else
 		return Duel.GetMatchingGroup(f,0,LOCATION_MZONE,LOCATION_MZONE,nil)
 	end
+end
+--get the amount of damage a player has
+function Duel.GetDamageCount(player)
+	return Duel.GetMatchingGroupCount(aux.DamageZoneFilter(),player,LOCATION_REMOVED,0,nil)
 end
 --ride a card
 function Duel.Ride(targets,player)
@@ -133,6 +138,8 @@ function Duel.Ride(targets,player)
 		end
 		Duel.Overlay(tc,vc)
 		res=res+Duel.SpecialSummon(tc,0,player,player,false,false,POS_FACEUP_STAND,ZONE_VC)
+		--raise event for "When another card rides this unit"
+		Duel.RaiseSingleEvent(vc,EVENT_CUSTOM+EVENT_BE_RIDE,Effect.GlobalEffect(),0,0,0,0)
 	end
 	return res
 end
@@ -159,19 +166,19 @@ function Duel.Call(targets,call_player,pos,dest,zone)
 	--zone: the circle to call the card on
 	if type(targets)=="Card" then targets=Group.FromCards(targets) end
 	pos=pos or POS_FACEUP_STAND
-	dest=dest or LOCATION_MZONE+LOCATION_SZONE
+	dest=dest or LOCATION_ONFIELD
 	local res=0
 	for tc in aux.Next(targets) do
 		--if tc:IsAbleToCall() then
-		if dest==LOCATION_MZONE+LOCATION_SZONE then
+		if dest==LOCATION_ONFIELD then
 			--choose to call on front or back rear-guard circle
 			local opt=Duel.SelectOption(call_player,OPTION_CALLFRONT,OPTION_CALLBACK)
 			dest=(opt==0 and LOCATION_MZONE) or (opt==1 and LOCATION_SZONE)
 		end
 		--retire card
 		local g=Duel.GetMatchingGroup(Card.IsRearGuard,call_player,dest,0,nil)
-		if (Duel.IsMainPhase() and dest==LOCATION_MZONE and not Duel.CheckFrontCircles(call_player))
-			or (Duel.IsMainPhase() and dest==LOCATION_SZONE and not Duel.CheckBackCircles(call_player))
+		if (dest==LOCATION_MZONE and not Duel.CheckFrontCircles(call_player) and zone==nil)
+			or (dest==LOCATION_SZONE and not Duel.CheckBackCircles(call_player))
 			or (Duel.IsMainPhase() and g:GetCount()>0 and Duel.SelectYesNo(call_player,YESNOMSG_RETIRE)) then
 			Duel.Hint(HINT_SELECTMSG,call_player,HINTMSG_RETIRE)
 			local sg=g:Select(call_player,1,1,nil)

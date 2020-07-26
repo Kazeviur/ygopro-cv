@@ -7,12 +7,12 @@ function scard.initial_effect(c)
 	aux.EnableUnitAttribute(c)
 	--skill icon (boost)
 	aux.EnableBoost(c)
-	--get effect
+	--gain effect
 	aux.AddAutoEffect(c,0,EVENT_TO_GRAVE,nil,scard.op1,nil,scard.con1)
 end
---get effect
+--gain effect
 function scard.cfilter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_MZONE+LOCATION_SZONE)
+	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
 	return aux.RCCondition(e,tp,eg,ep,ev,re,r,rp) and Duel.IsMainPhase(tp)

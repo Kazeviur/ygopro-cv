@@ -14,12 +14,11 @@ function scard.initial_effect(c)
 end
 --ride
 function scard.cfilter(c,tp)
-	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_MZONE+LOCATION_SZONE)
+	return c:IsControler(tp) and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=Duel.GetVanguard(tp)
 	return Duel.IsMainPhase(tp) and eg and eg:IsExists(scard.cfilter,1,nil,1-tp)
-		and tc:IsFaceup() and tc:IsGrade(2)
+		and aux.SelfVanguardCondition(Card.IsGrade,2)(e,tp,eg,ep,ev,re,r,rp)
 end
 function scard.tg1(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToRide(e,0,tp,false,false) end

@@ -6,9 +6,15 @@ MAX_NUMBER	=999999999	--Max number allowed in YGOPro
 --Card ID
 CARD_BLASTER_BLADE					=10001005	--Supported by "Solitary Knight, Gancelot" (TD01/003)
 CARD_WYVERN_STRIKE_TEJAS			=10002006	--Supported by "Wyvern Strike, Jarran" (TD02/011)
+CARD_KING_OF_SWORD					=10003004	--Supported by "Queen of Heart" (TD03/010)
+CARD_GREAT_SILVER_WOLF_GARMORE		=10005001	--Supported by "Charjgal" (TD05/011)
+CARD_THUNDER_BREAK_DRAGON			=10006001	--Supported by "Dragon Dancer, RaiRai" (TD06/012)
 CARD_CRIMSON_BUTTERFLY_BRIGITTE		=10001001	--EVENT_CUSTOM+EVENT_DRIVE_CHECK
 CARD_WINGAL							=10001009	--EVENT_CUSTOM+EVENT_BOOST
 CARD_BRINGER_OF_GOOD_LUCK_EPONA		=10001013	--EVENT_CUSTOM+EVENT_TRIGGER_UNIT
+CARD_MR_INVINCIBLE					=10003003	--EVENT_CUSTOM+EVENT_MAIN_PHASE_START
+CARD_NGM_PROTOTYPE					=10003006	--EVENT_CUSTOM+EVENT_INTERCEPT
+CARD_BATTLERAIZER					=10003015	--EVENT_CUSTOM+EVENT_BE_RIDE
 --Location
 LOCATION_ALL		=0xff		--All locations
 LOCATION_DECK		=0x01		--Deck
@@ -85,6 +91,27 @@ NATION_ZOO				=0x20		--Zoo
 --<<Clan>>
 CLAN_ROYAL_PALADIN		=0x1	--Introduced by "Crimson Butterfly, Brigitte" (TD01/001)
 CLAN_KAGERO				=0x2	--Introduced by "Dragonic Overlord" (TD02/001)
+CLAN_ORACLE_THINK_TANK	=0x3	--Introduced by "CEO Amaterasu" (BT01/006)
+CLAN_NOVA_GRAPPLER		=0x4	--Introduced by "Asura Kaiser" (BT01/008)
+CLAN_SPIKE_BROTHERS		=0x5	--Introduced by "Juggernaut Maximum" (BT01/020)
+CLAN_TACHIKAZE			=0x6	--Introduced by "Tyrant, Deathrex" (BT01/033)
+CLAN_NUBATAMA			=0x7	--Introduced by "Stealth Dragon, Voidmaster" (BT01/035)
+CLAN_DARK_IRREGULARS	=0x8	--Introduced by "Demon Eater" (BT01/036)
+CLAN_GRANBLUE			=0x9	--Introduced by "Monster Frank" (BT01/037)
+CLAN_MEGACOLONY			=0xa	--Introduced by "Hell Spider" (BT01/039)
+CLAN_BERMUDA_TRIANGLE	=0xb	--Introduced by "Top Idol, Flores" (BT02/020)
+CLAN_GREAT_NATURE		=0xc	--Introduced by "Scientist Monkey Rue" (BT02/039)
+CLAN_GOLD_PALADIN		=0xd	--Introduced by "Great Silver Wolf, Garmore" (TD05/001)
+CLAN_NARUKAMI			=0xe	--Introduced by "Thunder Break Dragon" (TD06/001)
+CLAN_ANGEL_FEATHER		=0xf 	--Introduced by "Circular Saw, Kiriel" (BT06/001)
+CLAN_PALE_MOON			=0x10	--Introduced by "Nightmare Doll, Alice" (BT03/003)
+CLAN_DIMENSION_POLICE	=0x11	--Introduced by "Super Dimensional Robo, Daiyusha" (BT03/020)
+CLAN_SHADOW_PALADIN		=0x12	--Introduced by "Phantom Blaster Dragon" (BT04/001)
+CLAN_MURAKUMO			=0x13	--Introduced by "Covert Demonic Dragon, Mandala Lord" (BT05/001)
+CLAN_NEO_NECTAR			=0x14	--Introduced by "Maiden of Trailing Rose" (BT05/009)
+CLAN_AQUA_FORCE			=0x15	--Introduced by "Navalgazer Dragon" (TD07/001)
+CLAN_GENESIS			=0x16	--Introduced by "Oracle Queen, Himiko" (BT10/004)
+CLAN_LINK_JOKER			=0x17	--Introduced by "Star-vader, Infinite Zero Dragon" (TD11/001)
 --<Race>
 RACE_SALAMANDER			=0x1	--Introduced by "Crimson Butterfly, Brigitte" (TD01/001)
 RACE_HUMAN				=0x2	--Introduced by "Knight of Conviction, Bors" (TD01/002)
@@ -100,6 +127,12 @@ RACE_DRAGONMAN			=0xb	--Introduced by "Demonic Dragon Berserker, Yaksha" (TD02/0
 RACE_WINGED_DRAGON		=0xc	--Introduced by "Wyvern Strike, Tejas" (TD02/006)
 RACE_DEMON				=0xd	--Introduced by "Embodiment of Armor, Bahr" (TD02/007)
 RACE_GILLMAN			=0xe	--Introduced by "Dragon Monk, Gojo" (TD02/008)
+
+RACE_BATTLEROID			=0xf	--Introduced by "Gold Rutile" (TD03/001)
+RACE_ALIEN				=0x10	--Introduced by "Mr. Invincible" (TD03/003)
+RACE_WORKEROID			=0x11	--Introduced by "Oasis Girl" (TD03/008)
+RACE_NOBLE				=0x12	--Introduced by "Goddess of Flower Divination, Sakuya" (TD04/002)
+RACE_THUNDER_DRAGON		=0x13	--Introduced by "Thunder Break Dragon" (TD06/001)
 --Reason
 --The reason for sending a card to another location
 REASON_DESTROY		=0x1		--(unused)
@@ -298,7 +331,7 @@ EFFECT_TYPE_QUICK_F			=0x0400		--Mandatory Quick Effect
 EFFECT_TYPE_CONTINUOUS		=0x0800		--Continuous Effect, non-Chaining effect
 EFFECT_TYPE_XMATERIAL		=0x1000		--(unused)
 EFFECT_TYPE_GRANT			=0x2000		--(unused)
-EFFECT_TYPE_TARGET			=0x4000		--(unused)
+EFFECT_TYPE_TARGET			=0x4000		--(unused, not available in YGOPro Percy)
 --Flag
 --Characteristics of effects
 EFFECT_FLAG_INITIAL				=0x0001		--(unused)
@@ -429,7 +462,7 @@ EFFECT_UPDATE_POWER					=100	--Increase/decrease power
 EFFECT_SET_ATTACK					=101	--(unused)
 EFFECT_SET_ATTACK_FINAL				=102	--(unused)
 EFFECT_SET_BASE_ATTACK				=103	--(unused)
-EFFECT_UPDATE_SHIELD				=104	--(reserved) Increase/decrease shield
+EFFECT_UPDATE_SHIELD				=104	--Increase/decrease shield
 EFFECT_SET_DEFENSE					=105	--(unused)
 EFFECT_SET_DEFENSE_FINAL			=106	--(unused)
 EFFECT_SET_BASE_DEFENSE				=107	--Set original DEF
@@ -467,22 +500,22 @@ EFFECT_EXTRA_RELEASE				=153	--(unused)
 EFFECT_TRIBUTE_LIMIT				=154	--(unused)
 EFFECT_EXTRA_RELEASE_SUM			=155	--(unused)
 EFFECT_TRIPLE_TRIBUTE				=156	--(N/A)
-EFFECT_ADD_EXTRA_TRIBUTE			=157	--(unused)
-EFFECT_EXTRA_RELEASE_NONSUM			=158	--(unused)
+EFFECT_ADD_EXTRA_TRIBUTE			=157	--(unused, not available in YGOPro Percy)
+EFFECT_EXTRA_RELEASE_NONSUM			=158	--(unused, not available in YGOPro Percy)
 EFFECT_PUBLIC						=160	--(unused)
 EFFECT_COUNTER_PERMIT				=0x10000--(unused)
 EFFECT_COUNTER_LIMIT				=0x20000--(unused)
 EFFECT_RCOUNTER_REPLACE				=0x30000--(unused)
 EFFECT_LPCOST_CHANGE				=170	--(unused)
 EFFECT_LPCOST_REPLACE				=171	--(unused)
-EFFECT_SKIP_DP						=180	--(unused)
-EFFECT_SKIP_SP						=181	--(unused)
-EFFECT_SKIP_M1						=182	--(unused)
-EFFECT_SKIP_BP						=183	--(unused)
-EFFECT_SKIP_M2						=184	--(unused)
-EFFECT_CANNOT_BP					=185	--(unused)
+EFFECT_SKIP_DP						=180	--Skip Draw Phase
+EFFECT_SKIP_SP						=181	--Skip Standby Phase
+EFFECT_SKIP_M1						=182	--(unused) Skip Main Phase 1
+EFFECT_SKIP_BP						=183	--(unused) Skip Battle Phase
+EFFECT_SKIP_M2						=184	--(unused) Skip Main Phase 2
+EFFECT_CANNOT_BP					=185	--(unused) Cannot conduct Battle Phase
 EFFECT_CANNOT_M2					=186	--Cannot conduct Main Phase 2
-EFFECT_CANNOT_EP					=187	--(unused)
+EFFECT_CANNOT_EP					=187	--(unused) Cannot conduct End Phase
 EFFECT_SKIP_TURN					=188	--(unused)
 EFFECT_DEFENSE_ATTACK				=190	--(unused)
 EFFECT_MUST_ATTACK					=191	--(unused)
@@ -638,7 +671,7 @@ EVENT_CHAIN_END					=1026	--(unused)
 EVENT_CHAINING					=1027	--When a card/effect is activating in response to another card/effect
 EVENT_BECOME_TARGET				=1028	--(unused)
 EVENT_DESTROYED					=1029	--(unused)
-EVENT_MOVE						=1030	--(unused)
+EVENT_MOVE						=1030	--(unused, not available in YGOPro Percy)
 EVENT_ADJUST					=1040	--After adjusting the adjust_all() card
 EVENT_SUMMON_SUCCESS			=1100	--(unused)
 EVENT_FLIP_SUMMON_SUCCESS		=1101	--(unused)
@@ -650,13 +683,13 @@ EVENT_MSET						=1106	--(unused)
 EVENT_SSET						=1107	--(unused)
 EVENT_BE_MATERIAL				=1108	--(unused)
 EVENT_BE_PRE_MATERIAL			=1109	--(unused)
-EVENT_DRAW						=1110	--(unused)
+EVENT_DRAW						=1110	--When a player draws a card
 EVENT_DAMAGE					=1111	--When a player takes damage
 EVENT_RECOVER					=1112	--(unused)
 EVENT_STAND_PHASE				=1113	--Stand Phase
-EVENT_SUMMON_NEGATED			=1114	--(unused)
-EVENT_FLIP_SUMMON_NEGATED		=1115	--(unused)
-EVENT_SPSUMMON_NEGATED			=1116	--(unused)
+EVENT_SUMMON_NEGATED			=1114	--(unused, not available in YGOPro Percy)
+EVENT_FLIP_SUMMON_NEGATED		=1115	--(unused, not available in YGOPro Percy)
+EVENT_SPSUMMON_NEGATED			=1116	--(unused, not available in YGOPro Percy)
 EVENT_CONTROL_CHANGED			=1120	--(unused)
 EVENT_EQUIP						=1121	--(unused)
 EVENT_ATTACK_ANNOUNCE			=1130	--When a card attacks
@@ -684,14 +717,17 @@ EVENT_RETURN_TO_GRAVE			=1203	--(unused)
 EVENT_TURN_END					=1210	--At the end of the turn
 EVENT_PHASE						=0x1000	--During a phase of a turn (combined with PHASE constant)
 EVENT_PHASE_START				=0x2000	--At the start of a phase of a turn (combined with PHASE constant)
-EVENT_ADD_COUNTER				=0x10000	--(unused)
-EVENT_REMOVE_COUNTER			=0x20000	--(unused)
+EVENT_ADD_COUNTER				=0x10000	--(unused, combined with counter ID)
+EVENT_REMOVE_COUNTER			=0x20000	--(unused, combined with counter ID)
 EVENT_CUSTOM					=0x10000000	--Custom event
 --The following is only available in YGOPro CV
 EVENT_DRIVE_CHECK				=CARD_CRIMSON_BUTTERFLY_BRIGITTE	--Drive Check
 EVENT_PLACED_RC					=CARD_BLASTER_BLADE					--When a card is placed on (RC)
 EVENT_BOOST						=CARD_WINGAL						--When a card boosts another card
 EVENT_TRIGGER_UNIT				=CARD_BRINGER_OF_GOOD_LUCK_EPONA	--Trigger Check
+EVENT_MAIN_PHASE_START			=CARD_MR_INVINCIBLE					--At the beginning of the main phase
+EVENT_INTERCEPT					=CARD_NGM_PROTOTYPE					--When a card intercepts
+EVENT_BE_RIDE					=CARD_BATTLERAIZER					--When a card rides another card
 --Hint
 --Message displayed in the center of the screen
 HINT_EVENT				=1	--(unused)
@@ -744,6 +780,8 @@ HINTMSG_DROP			=508	--Select a card to put into the Drop Zone.
 HINTMSG_STAND			=509	--Select a card to [Stand].
 HINTMSG_FLIPOVER		=510	--Select a card to flip over.
 HINTMSG_ATOHAND			=511	--Select a card to add to your hand.
+HINTMSG_TODECK			=512	--Select a card to return to the deck.
+HINTMSG_CALL			=513	--Select a card to Call to the Rear-Guard Circle.
 --Information displayed in a dialog box
 ERROR_DECKCOUNT			=1450	--Your deck must be exactly 50 cards!
 ERROR_TRIGGERCOUNT		=1451	--Your deck must have exactly 16 Trigger Units!
@@ -751,6 +789,7 @@ ERROR_HEALCOUNT			=1452	--You cannot include more than 4 Trigger Units with "HEA
 ERROR_NOTARGETS			=1630	--There is no applicable card.
 --Yes No Message (for Duel.SelectYesNo)
 YESNOMSG_RETIRE			=600	--Retire a card?
+YESNOMSG_DRAW			=601	--Draw a card?
 --Option (for Duel.SelectOption)
 OPTION_HEADS			=60		--(unused)
 OPTION_TAILS			=61		--(unused)
@@ -802,7 +841,7 @@ TIMING_BATTLE_PHASE			=0x1000000	--(unused)
 TIMING_EQUIP				=0x2000000	--(unused)
 TIMING_BATTLE_STEP_END		=0x4000000	--(unused)
 --Timing combinations
-TIMINGS_CHECK_MONSTER		=0x1c0		--(unused)
+TIMINGS_CHECK_MONSTER		=0x1c0		--(unused) TIMING_SUMMON+TIMING_SPSUMMON+TIMING_FLIPSUMMON
 --Global Flag
 --Special effect flag
 GLOBALFLAG_DECK_REVERSE_CHECK	=0x1		--(unused)

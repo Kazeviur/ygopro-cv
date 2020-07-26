@@ -7,11 +7,11 @@ function scard.initial_effect(c)
 	aux.EnableUnitAttribute(c)
 	--skill icon (boost)
 	aux.EnableBoost(c)
-	--get effect
-	local targ_func=aux.TargetCardFunction(PLAYER_SELF,scard.effilter,LOCATION_MZONE+LOCATION_SZONE,0,1,1,HINTMSG_GAINPOWER,c)
+	--gain effect (gain power)
+	local targ_func=aux.TargetCardFunction(PLAYER_SELF,scard.effilter,LOCATION_ONFIELD,0,1,1,HINTMSG_GAINPOWER,c)
 	aux.AddSingleAutoEffect(c,0,EVENT_CUSTOM+EVENT_PLACED_RC,targ_func,scard.op1,EFFECT_FLAG_CARD_TARGET)
 end
---get effect
+--gain effect (gain power)
 function scard.effilter(c)
 	return c:IsFaceup() and c:IsClan(CLAN_ROYAL_PALADIN)
 end

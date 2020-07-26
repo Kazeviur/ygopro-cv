@@ -99,46 +99,39 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e5:SetCode(EVENT_BATTLE_CONFIRM)
 	e5:SetOperation(Rule.DriveOperation)
 	Duel.RegisterEffect(e5,0)
-	--retire guardians
-	local e6=Effect.GlobalEffect()
-	e6:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e6:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e6:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
-	e6:SetOperation(Rule.RetireOperation)
-	Duel.RegisterEffect(e6,0)
 	--inflict damage
-	local e7=Effect.GlobalEffect()
-	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e7:SetCode(EVENT_BATTLED)
-	e7:SetCondition(Rule.DamageCondition)
-	e7:SetOperation(Rule.DamageOperation)
-	Duel.RegisterEffect(e7,0)
+	local e6=Effect.GlobalEffect()
+	e6:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e6:SetCode(EVENT_BATTLED)
+	e6:SetCondition(Rule.DamageCondition)
+	e6:SetOperation(Rule.DamageOperation)
+	Duel.RegisterEffect(e6,0)
 	--damage check
+	local e7=Effect.GlobalEffect()
+	e7:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e7:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e7:SetCode(EVENT_DAMAGE)
+	e7:SetOperation(Rule.DamageCheckOperation)
+	Duel.RegisterEffect(e7,0)
+	--trigger check
 	local e8=Effect.GlobalEffect()
 	e8:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e8:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e8:SetCode(EVENT_DAMAGE)
-	e8:SetOperation(Rule.DamageCheckOperation)
+	e8:SetCode(EVENT_ADJUST)
+	e8:SetOperation(Rule.TriggerCheckOperation)
 	Duel.RegisterEffect(e8,0)
-	--trigger check
+	--set lp
 	local e9=Effect.GlobalEffect()
-	e9:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e9:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e9:SetCode(EVENT_ADJUST)
-	e9:SetOperation(Rule.TriggerCheckOperation)
+	e9:SetOperation(Rule.SetLPOperation)
 	Duel.RegisterEffect(e9,0)
-	--set lp
+	--win game
 	local e10=Effect.GlobalEffect()
 	e10:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e10:SetCode(EVENT_ADJUST)
-	e10:SetOperation(Rule.SetLPOperation)
+	e10:SetOperation(Rule.WinOperation)
 	Duel.RegisterEffect(e10,0)
-	--win game
-	local e11=Effect.GlobalEffect()
-	e11:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e11:SetCode(EVENT_ADJUST)
-	e11:SetOperation(Rule.WinOperation)
-	Duel.RegisterEffect(e11,0)
 	--override yugioh rules
 	--draw first turn
 	Rule.draw_first_turn()
@@ -203,10 +196,10 @@ function Rule.redraw(tp)
 end
 --stand phase
 function Rule.StandCondition(e)
-	return Duel.IsExistingMatchingCard(Card.IsAbleToStand,Duel.GetTurnPlayer(),LOCATION_MZONE+LOCATION_SZONE,0,1,nil)
+	return Duel.IsExistingMatchingCard(Card.IsAbleToStand,Duel.GetTurnPlayer(),LOCATION_ONFIELD,0,1,nil)
 end
 function Rule.StandOperation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetMatchingGroup(Card.IsAbleToStand,Duel.GetTurnPlayer(),LOCATION_MZONE+LOCATION_SZONE,0,nil)
+	local g=Duel.GetMatchingGroup(Card.IsAbleToStand,Duel.GetTurnPlayer(),LOCATION_ONFIELD,0,nil)
 	Duel.ChangePosition(g,POS_FACEUP_STAND)
 end
 --ride phase
@@ -217,9 +210,14 @@ function Rule.RideOperation(e,tp,eg,ep,ev,re,r,rp)
 	local turnp=Duel.GetTurnPlayer()
 	local tc=Duel.GetVanguard(turnp)
 	local grade=tc:GetGrade()
-	Duel.Hint(HINT_SELECTMSG,turnp,HINTMSG_RIDE)
-	local g=Duel.SelectMatchingCard(turnp,Rule.RideFilter,turnp,LOCATION_HAND,0,0,1,nil,e,turnp,grade)
-	Duel.Ride(g,turnp)
+	local g=Duel.GetMatchingGroup(Rule.RideFilter,turnp,LOCATION_HAND,0,nil,e,turnp,grade)
+	if g:GetCount()>0 then
+		Duel.Hint(HINT_SELECTMSG,turnp,HINTMSG_RIDE)
+		local sg=g:Select(turnp,0,1,nil)
+		Duel.Ride(sg,turnp)
+	end
+	--raise event for "At the beginning of the main phase"
+	Duel.RaiseEvent(e:GetHandler(),EVENT_CUSTOM+EVENT_MAIN_PHASE_START,e,0,0,0,0)
 end
 --tap to attack workaround
 function Rule.AttackTapOperation(e,tp,eg,ep,ev,re,r,rp)
@@ -235,17 +233,61 @@ end
 --guard step
 function Rule.GuardOperation(e,tp,eg,ep,ev,re,r,rp)
 	local turnp=Duel.GetTurnPlayer()
-	local d=Duel.GetAttackTarget()
 	local g=Duel.GetMatchingGroup(aux.TRUE--[[Card.IsAbleToCall]],1-turnp,LOCATION_HAND,0,nil)
-	if g:GetCount()==0 then return end
-	Duel.Hint(HINT_OPSELECTED,turnp,DESC_GUARD_STEP)
-	Duel.Hint(HINT_SELECTMSG,1-turnp,HINTMSG_TOGCIRCLE)
-	local tc=g:Select(1-turnp,0,1,nil):GetFirst()
-	if not tc then return end
-	Duel.Call(tc,1-turnp,POS_FACEUP_REST,LOCATION_MZONE,bit.lshift(0x1,5))
-	--add shield
-	local e1=aux.AddTempEffectUpdatePower(d,d,tc:GetShield(),RESET_PHASE+PHASE_DAMAGE)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	if g:GetCount()>0 then
+		Duel.Hint(HINT_OPSELECTED,turnp,DESC_GUARD_STEP)
+		Duel.Hint(HINT_SELECTMSG,1-turnp,HINTMSG_TOGCIRCLE)
+		local sg=g:Select(1-turnp,0,1,nil)
+		if sg:GetCount()>0 then
+			Duel.Call(sg,1-turnp,POS_FACEUP_REST,LOCATION_MZONE,bit.lshift(0x1,5))
+		end
+	end
+	--damage step (check guardians)
+	local e1=Effect.CreateEffect(e:GetHandler())
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetCountLimit(1)
+	e1:SetOperation(Rule.DamageStepOperation)
+	e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
+	Duel.RegisterEffect(e1,tp)
+	--retire guardians
+	local e2=Effect.CreateEffect(e:GetHandler())
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e2:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
+	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e2:SetCountLimit(1)
+	e2:SetOperation(Rule.RetireOperation)
+	e2:SetReset(RESET_PHASE+PHASE_DAMAGE)
+	Duel.RegisterEffect(e2,tp)
+end
+--damage step (check guardians)
+function Rule.DamageStepOperation(e,tp,eg,ep,ev,re,r,rp)
+	local turnp=Duel.GetTurnPlayer()
+	local tc1=Duel.GetGuardian(turnp)
+	local tc2=Duel.GetGuardian(1-turnp)
+	if tc1 then
+		--add shield (attacker)
+		Rule.add_shield(Duel.GetAttacker(),tc1:GetShield())
+	end
+	if tc2 then
+		--add shield (attack target)
+		Rule.add_shield(Duel.GetAttackTarget(),tc2:GetShield())
+	end
+end
+function Rule.add_shield(c,val)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_UPDATE_POWER)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetValue(val)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE)
+	c:RegisterEffect(e1)
+end
+--retire guardians
+function Rule.RetireOperation(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetGuardian()
+	Duel.SendtoDrop(g,REASON_RULE)
 end
 --drive step
 function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
@@ -256,6 +298,7 @@ function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,ct do
 		Duel.ConfirmDecktop(cp,1)
 		local g=Duel.GetDecktopGroup(cp,1)
+		Duel.DisableShuffleCheck()
 		Duel.SendtoTrigger(g)
 		local tc=g:GetFirst()
 		--add drive check status
@@ -275,11 +318,6 @@ function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.RaiseSingleEvent(a,EVENT_CUSTOM+EVENT_DRIVE_CHECK,e,0,0,0,0)
 	end
 end
---retire guardians
-function Rule.RetireOperation(e,tp,eg,ep,ev,re,r,rp)
-	local g=Duel.GetGuardian()
-	Duel.SendtoDrop(g,REASON_RULE)
-end
 --inflict damage
 function Rule.DamageCondition(e)
 	local a=Duel.GetAttacker()
@@ -296,6 +334,7 @@ function Rule.DamageCheckOperation(e,tp,eg,ep,ev,re,r,rp)
 	for i=1,ev do
 		Duel.ConfirmDecktop(ep,1)
 		local g=Duel.GetDecktopGroup(ep,1)
+		Duel.DisableShuffleCheck()
 		Duel.SendtoTrigger(g)
 	end
 end
@@ -336,8 +375,8 @@ function Rule.move_trigger_unit(c)
 end
 --set lp
 function Rule.SetLPOperation(e,tp,eg,ep,ev,re,r,rp)
-	local ct1=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(),PLAYER_ONE,LOCATION_REMOVED,0,nil)
-	local ct2=Duel.GetMatchingGroupCount(aux.DamageZoneFilter(),PLAYER_TWO,LOCATION_REMOVED,0,nil)
+	local ct1=Duel.GetDamageCount(PLAYER_ONE)
+	local ct2=Duel.GetDamageCount(PLAYER_TWO)
 	if Duel.GetLP(PLAYER_ONE)~=6-ct1 then Duel.SetLP(PLAYER_ONE,6-ct1) end
 	if Duel.GetLP(PLAYER_TWO)~=6-ct2 then Duel.SetLP(PLAYER_TWO,6-ct2) end
 end
@@ -415,7 +454,7 @@ function Rule.infinite_attacks()
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_EXTRA_ATTACK)
-	e1:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
 	e1:SetValue(MAX_NUMBER)
 	Duel.RegisterEffect(e1,0)
 end
@@ -434,7 +473,7 @@ function Rule.cannot_change_position()
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_SET_AVAILABLE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_CHANGE_POSITION)
-	e1:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
 	Duel.RegisterEffect(e1,0)
 end
 --cannot direct attack
@@ -443,7 +482,7 @@ function Rule.cannot_direct_attack()
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_CANNOT_DIRECT_ATTACK)
-	e1:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
 	Duel.RegisterEffect(e1,0)
 end
 --no battle damage
@@ -452,7 +491,7 @@ function Rule.avoid_battle_damage()
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_AVOID_BATTLE_DAMAGE)
-	e1:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
 	e1:SetValue(1)
 	Duel.RegisterEffect(e1,0)
 end
@@ -467,7 +506,7 @@ function Rule.indestructible()
 	e1:SetValue(1)
 	Duel.RegisterEffect(e1,0)
 	local e2=e1:Clone()
-	e2:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e2:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
 	e2:SetTarget(aux.TargetBoolFunction(aux.AND(Card.IsRearGuard,Card.IsAttacker)))
 	Duel.RegisterEffect(e2,0)
 end
@@ -477,7 +516,8 @@ function Rule.def_equal_atk()
 	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_SET_BASE_DEFENSE)
-	e1:SetTargetRange(LOCATION_MZONE+LOCATION_SZONE,LOCATION_MZONE+LOCATION_SZONE)
+	e1:SetTargetRange(LOCATION_ONFIELD,LOCATION_ONFIELD)
+	e1:SetTarget(aux.NOT(aux.TargetBoolFunction(Card.IsGuardian)))
 	e1:SetValue(function(e,c)
 		return c:GetPower()
 	end)
@@ -495,8 +535,8 @@ end
 function Rule.DestroyOperation(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
-	if not a or not a:IsLocation(LOCATION_MZONE+LOCATION_SZONE)
-		or not d or not d:IsLocation(LOCATION_MZONE+LOCATION_SZONE) or not d:IsDefensePos() then return end
+	if not a or not a:IsLocation(LOCATION_ONFIELD)
+		or not d or not d:IsLocation(LOCATION_ONFIELD) or not d:IsDefensePos() then return end
 	local ef1=a:IsHasEffect(EFFECT_INDESTRUCTIBLE) or a:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local ef2=d:IsHasEffect(EFFECT_INDESTRUCTIBLE) or d:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local g=Group.CreateGroup()
@@ -515,7 +555,7 @@ function Rule.cannot_replay()
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_LEAVE_FIELD)
 	e1:SetCondition(function(e,tp,eg,ep,ev,re,r,rp)
-		return eg:IsExists(Card.IsPreviousLocation,1,nil,LOCATION_MZONE+LOCATION_SZONE) and Duel.CheckEvent(EVENT_ATTACK_ANNOUNCE)
+		return eg:IsExists(Card.IsPreviousLocation,1,nil,LOCATION_ONFIELD) and Duel.CheckEvent(EVENT_ATTACK_ANNOUNCE)
 	end)
 	e1:SetOperation(function(e,tp,eg,ep,ev,re,r,rp)
 		local a=Duel.GetAttacker()
