@@ -292,6 +292,8 @@ Card.GetOriginalPower=Card.GetBaseAttack
 Card.GetOriginalShield=Card.GetBaseDefense
 --get a card's soul
 Card.GetSoul=Card.GetOverlayGroup
+--get a soul's target
+Card.GetSoulTarget=Card.GetOverlayTarget
 --check if a card can ride
 Card.IsAbleToRide=Card.IsCanBeSpecialSummoned
 --check if a card can be sent to the drop zone

@@ -1,6 +1,5 @@
 --Battleraizer
 --Note: EVENT_BE_RIDE won't be raised if SetType is EFFECT_TYPE_TRIGGER
---UNTESTED OUTSIDE PUZZLES
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
 	aux.AddClan(c,CLAN_NOVA_GRAPPLER)
@@ -17,12 +16,14 @@ function scard.initial_effect(c)
 end
 --call
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
-	local tc=e:GetHandler():GetOverlayTarget()
+	local tc=e:GetHandler():GetSoulTarget()
 	return tc:IsClan(CLAN_NOVA_GRAPPLER)
 end
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local cp=c:GetSoulTarget():GetControler()
 	Duel.Hint(HINT_CARD,0,sid)
-	Duel.Call(e:GetHandler(),tp)
+	Duel.Call(e:GetHandler(),cp)
 end
 --gain effect
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
