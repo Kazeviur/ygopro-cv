@@ -622,17 +622,17 @@ function Auxiliary.EventPlayerCondition(p)
 				return ep==player
 			end
 end
---condition function for "(VC)"
+--condition for "(VC)"
 --e.g. "Crimson Butterfly, Brigitte" (TD01/001)
 function Auxiliary.VCCondition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsVanguard()
 end
---condition function for "(RC)"
+--condition for "(RC)"
 --e.g. "Demonic Dragon Madonna, Joka" (TD02/010)
 function Auxiliary.RCCondition(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsRearGuard()
 end
---condition function for "When this unit's drive check reveals"
+--condition for "When this unit's drive check reveals"
 --e.g. "Crimson Butterfly, Brigitte" (TD01/001)
 function Auxiliary.DriveCheckCondition(f,...)
 	local ext_params={...}
@@ -640,7 +640,7 @@ function Auxiliary.DriveCheckCondition(f,...)
 				return Duel.GetDriveCheckGroup():IsExists(f,1,nil,table.unpack(ext_params))
 			end
 end
---condition function to check your vanguard
+--condition to check your vanguard
 --e.g. "Blaster Blade" (TD01/005)
 function Auxiliary.SelfVanguardCondition(f,...)
 	local ext_params={...}
@@ -649,7 +649,7 @@ function Auxiliary.SelfVanguardCondition(f,...)
 				return tc and tc:IsFaceup() and (not f or f(tc,table.unpack(ext_params)))
 			end
 end
---condition function to check the attacking card
+--condition to check the attacking card
 --e.g. "Wingal" (TD01/009)
 function Auxiliary.AttackerCondition(f,...)
 	local ext_params={...}
@@ -658,7 +658,7 @@ function Auxiliary.AttackerCondition(f,...)
 				return a and (not f or f(a,table.unpack(ext_params)))
 			end
 end
---condition function to check the attacked card
+--condition to check the attacked card
 --e.g. "Great Silver Wolf, Garmore" (TD05/001)
 function Auxiliary.AttackTargetCondition(f,...)
 	local ext_params={...}
@@ -667,7 +667,7 @@ function Auxiliary.AttackTargetCondition(f,...)
 				return d and (not f or f(d,table.unpack(ext_params)))
 			end
 end
---condition function for "When this unit's attack hits" + EVENT_DAMAGE_STEP_END
+--condition for "When this unit's attack hits" + EVENT_DAMAGE_STEP_END
 --e.g. "Dragonic Overlord" (TD02/001)
 function Auxiliary.SelfAttackHitCondition(f,...)
 	local ext_params={...}
@@ -678,7 +678,7 @@ function Auxiliary.SelfAttackHitCondition(f,...)
 				return a and d and a:GetPower()>=d:GetPower() and (not f or f(d,table.unpack(ext_params)))
 			end
 end
---condition function for "When an attack hits" + EVENT_DAMAGE_STEP_END
+--condition for "When an attack hits" + EVENT_DAMAGE_STEP_END
 --e.g. "Flame of Hope, Aermo" (TD02/009)
 function Auxiliary.AttackHitCondition(f,...)
 	local ext_params={...}
@@ -688,14 +688,14 @@ function Auxiliary.AttackHitCondition(f,...)
 				return a and d and a:GetPower()>=d:GetPower() and (not f or f(d,table.unpack(ext_params)))
 			end
 end
---condition function for "Limit Break N (This ability is active if you have N or more damage)"
+--condition for "Limit Break N (This ability is active if you have N or more damage)"
 --e.g. "Great Silver Wolf, Garmore" (TD05/001)
 function Auxiliary.LimitBreakCondition(ct)
 	return	function(e,tp,eg,ep,ev,re,r,rp)
 				return Duel.GetDamageCount(tp)>=ct
 			end
 end
---cost function for "[Counter Blast (N)]"
+--cost for "[Counter Blast (N)]"
 --e.g. "Knight of Conviction, Bors" (TD01/002)
 function Auxiliary.CounterBlastCost(ct)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -706,7 +706,7 @@ function Auxiliary.CounterBlastCost(ct)
 				Duel.ChangePosition(g,POS_FACEDOWN)
 			end
 end
---cost function for "[Reveal this card to your opponent, and put it on top of your deck]"
+--cost for "[Reveal this card to your opponent, and put it on top of your deck]"
 --e.g. "Solitary Knight, Gancelot" (TD01/003)
 function Auxiliary.SelfToDeckCost(seq)
 	--seq: where to send the card (SEQ_DECK)
@@ -717,14 +717,14 @@ function Auxiliary.SelfToDeckCost(seq)
 				Duel.SendtoDeck(c,PLAYER_OWNER,seq,REASON_COST)
 			end
 end
---cost function for "[[Rest] this unit]"
+--cost for "[[Rest] this unit]"
 --e.g. "Boost", "Dragon Monk, Gojo" (TD02/008)
 function Auxiliary.SelfRestCost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
 	if chk==0 then return c:IsAbleToRest() end
 	Duel.ChangePosition(c,POS_FACEUP_REST)
 end
---cost function for "[Choose a card from your hand, and discard it]"
+--cost for "[Choose a card from your hand, and discard it]"
 --e.g. "Knight of Rose, Morgana" (TD01/011)
 function Auxiliary.DiscardCost(min,max,f,...)
 	--min,max: the number of cards to discard (nil to discard all cards)
@@ -758,7 +758,7 @@ function Auxiliary.DiscardCost(min,max,f,...)
 				end
 			end
 end
---cost function for "[Soul Charge (N)]"
+--cost for "[Soul Charge (N)]"
 --e.g. "Mr. Invincible" (TD03/003)
 function Auxiliary.SoulChargeCost(ct)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -767,7 +767,7 @@ function Auxiliary.SoulChargeCost(ct)
 				Duel.Overlay(e:GetHandler(),g)
 			end
 end
---cost function for "[Soul Blast (N)]"
+--cost for "[Soul Blast (N)]"
 --e.g. "Mr. Invincible" (TD03/003)
 function Auxiliary.SoulBlastCost(ct)
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -778,7 +778,7 @@ function Auxiliary.SoulBlastCost(ct)
 				Duel.SendtoDrop(sg,REASON_COST)
 			end
 end
---target function for Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+--target for Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 function Auxiliary.HintTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if e:IsHasProperty(EFFECT_FLAG_CARD_TARGET) then
 		if chkc then return false end
@@ -786,7 +786,7 @@ function Auxiliary.HintTarget(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chk==0 then return true end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 end
---target function for effects that target cards
+--target for effects that target cards
 --e.g. "Starlight Unicorn" (TD01/010)
 function Auxiliary.TargetCardFunction(p,f,s,o,min,max,desc,ex,...)
 	local ext_params={...}
@@ -814,7 +814,7 @@ function Auxiliary.TargetCardFunction(p,f,s,o,min,max,desc,ex,...)
 				Duel.SelectTarget(player,f,tp,s,o,min,max,exg,e,tp,eg,ep,ev,re,r,rp,table.unpack(ext_params))
 			end
 end
---operation function for effects that target cards
+--operation for effects that target cards
 --f: Duel.SendtoDrop to retire cards (e.g. "Blaster Blade" TD01/005)
 --f: Duel.ChangePosition to change positions (e.g. "Gold Rutile" TD03/001)
 function Auxiliary.TargetCardsOperation(f,...)
@@ -826,7 +826,7 @@ function Auxiliary.TargetCardsOperation(f,...)
 				end
 			end
 end
---operation function for effects that target cards to increase/decrease their power
+--operation for effects that target cards to increase/decrease their power
 --e.g. "Starlight Unicorn" (TD01/010)
 function Auxiliary.TargetUpdatePowerOperation(val,reset_flag,reset_count)
 	return	function(e,tp,eg,ep,ev,re,r,rp)
@@ -837,7 +837,7 @@ function Auxiliary.TargetUpdatePowerOperation(val,reset_flag,reset_count)
 				end
 			end
 end
---operation function for effects that let a player (PLAYER_SELF or PLAYER_OPPO) do something
+--operation for effects that let a player (PLAYER_SELF or PLAYER_OPPO) do something
 --f: Duel.Draw to let a player draw cards (e.g. "Dragon Monk, Gojo" TD02/008)
 function Auxiliary.DuelOperation(f,p,...)
 	local ext_params={...}

@@ -31,7 +31,7 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	--gain power
 	aux.AddTempEffectUpdatePower(c,Duel.GetAttacker(),3000,RESET_PHASE+PHASE_DAMAGE)
-	--return
+	--to deck
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(sid,2))
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
@@ -42,7 +42,7 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_DISABLE+RESET_PHASE+PHASE_END)
 	c:RegisterEffect(e1)
 end
---return
+--to deck
 function scard.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
 	Duel.SendtoDeck(e:GetHandler(),PLAYER_OWNER,SEQ_DECK_SHUFFLE,REASON_EFFECT)
