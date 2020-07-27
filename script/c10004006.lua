@@ -1,5 +1,4 @@
 --Sword Dancer Angel
---Q/A: Does this card gain 1000 power for each drawn card?
 local scard,sid=aux.GetID()
 function scard.initial_effect(c)
 	aux.AddClan(c,CLAN_ORACLE_THINK_TANK)
@@ -16,5 +15,13 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
 	--gain power
-	aux.AddTempEffectUpdatePower(c,c,1000,RESET_PHASE+PHASE_END)
+	aux.AddTempEffectUpdatePower(c,c,1000*ev,RESET_PHASE+PHASE_END)
 end
+--[[
+	Rulings
+
+	1. Question:When I draw two cards at once, does this ability gives this unit [Power]+2000?
+	2. Answer:Yes, you get [Power]+2000.
+
+	https://cardfight.fandom.com/wiki/Card_Rulings:Sword_Dancer_Angel
+]]
