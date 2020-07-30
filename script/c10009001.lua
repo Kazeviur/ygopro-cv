@@ -37,10 +37,12 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		Duel.HintSelection(g)
 		Duel.SendtoDrop(g,REASON_EFFECT)
 	end
-	Duel.SetTargetCard(tc)
-	Duel.HintSelection(Group.FromCards(tc))
-	--gain power
-	aux.AddTempEffectUpdatePower(c,tc,10000,RESET_PHASE+PHASE_END)
+	if tc:IsCanBeEffectTarget(e) then
+		Duel.SetTargetCard(tc)
+		Duel.HintSelection(Group.FromCards(tc))
+		--gain power
+		aux.AddTempEffectUpdatePower(c,tc,10000,RESET_PHASE+PHASE_END)
+	end
 end
 --gain effect
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)

@@ -31,10 +31,12 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local cp=c:GetSoulTarget():GetControler()
 	local tc=Duel.GetVanguard(cp)
 	Duel.Hint(HINT_CARD,0,sid)
-	Duel.SetTargetCard(tc)
-	Duel.HintSelection(Group.FromCards(tc))
-	--gain power
-	aux.AddTempEffectUpdatePower(c,tc,10000,RESET_PHASE+PHASE_END)
+	if tc:IsCanBeEffectTarget(e) then
+		Duel.SetTargetCard(tc)
+		Duel.HintSelection(Group.FromCards(tc))
+		--gain power
+		aux.AddTempEffectUpdatePower(c,tc,10000,RESET_PHASE+PHASE_END)
+	end
 	Duel.Hint(HINT_SELECTMSG,cp,HINTMSG_CALL)
 	local g=Duel.SelectMatchingCard(cp,scard.callfilter,cp,LOCATION_DECK,0,0,1,nil)
 	if g:GetCount()>0 then
