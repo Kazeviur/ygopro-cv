@@ -170,6 +170,21 @@ function Auxiliary.AddRace(c,...)
 		end
 	end
 end
+--register a card's series
+--required for Card.IsSeries
+function Auxiliary.AddSeries(c,...)
+	if c.series==nil then
+		local mt=getmetatable(c)
+		mt.series={}
+		for _,seriesname in ipairs{...} do
+			table.insert(mt.series,seriesname)
+		end
+	else
+		for _,seriesname in ipairs{...} do
+			table.insert(c.series,seriesname)
+		end
+	end
+end
 --combine two or more cost functions
 function Auxiliary.MergeCost(...)
 	local func_list={...}
@@ -211,6 +226,7 @@ end
 function Auxiliary.RegisterCardInfo(c)
 	if not ClanList then ClanList={} end
 	if not RaceList then RaceList={} end
+	if not SeriesList then SeriesList={} end
 	local m=_G["c"..c:GetCode()]
 	--register clan
 	if m and m.clan then
@@ -224,6 +240,13 @@ function Auxiliary.RegisterCardInfo(c)
 		for _,racename in ipairs(m.race) do
 			Auxiliary.AddSetcode(c,racename)
 			table.insert(RaceList,racename)
+		end
+	end
+	--register series
+	if m and m.series then
+		for _,seriesname in ipairs(m.series) do
+			Auxiliary.AddSetcode(c,seriesname)
+			table.insert(SeriesList,seriesname)
 		end
 	end
 end
@@ -431,6 +454,7 @@ end
 --code: EVENT_INTERCEPT for "[AUTO]:When this unit intercepts" (e.g. "NGM Prototype" TD03/006)
 --code: EVENT_BE_RIDE for "[AUTO]:When another unit rides this unit" (e.g. "Battleraizer" TD03/015)
 function Auxiliary.AddSingleAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,cost_func)
+	targ_func=targ_func or Auxiliary.HintTarget
 	prop=prop or 0
 	local typ=cost_func and EFFECT_TYPE_TRIGGER_O or EFFECT_TYPE_TRIGGER_F
 	local e1=Effect.CreateEffect(c)
@@ -441,7 +465,7 @@ function Auxiliary.AddSingleAutoEffect(c,desc_id,code,targ_func,op_func,prop,con
 	e1:SetRange(LOCATION_ONFIELD)
 	if con_func then e1:SetCondition(con_func) end
 	if cost_func then e1:SetCost(cost_func) end
-	if targ_func then e1:SetTarget(targ_func) end
+	e1:SetTarget(targ_func)
 	e1:SetOperation(op_func)
 	c:RegisterEffect(e1)
 	return e1
@@ -453,6 +477,7 @@ end
 --code: EVENT_MAIN_PHASE_START for "[AUTO]:At the beginning of your main phase" (e.g. "Mr. Invincible" TD03/003)
 --code: EVENT_DRAW for "[AUTO]:When you draw a card" (e.g. "Sword Dancer Angel" TD04/006)
 function Auxiliary.AddAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,cost_func)
+	targ_func=targ_func or Auxiliary.HintTarget
 	prop=prop or 0
 	local typ=cost_func and EFFECT_TYPE_TRIGGER_O or EFFECT_TYPE_TRIGGER_F
 	local e1=Effect.CreateEffect(c)
@@ -463,7 +488,7 @@ function Auxiliary.AddAutoEffect(c,desc_id,code,targ_func,op_func,prop,con_func,
 	e1:SetRange(LOCATION_ONFIELD)
 	if con_func then e1:SetCondition(con_func) end
 	if cost_func then e1:SetCost(cost_func) end
-	if targ_func then e1:SetTarget(targ_func) end
+	e1:SetTarget(targ_func)
 	e1:SetOperation(op_func)
 	c:RegisterEffect(e1)
 	return e1
@@ -471,6 +496,7 @@ end
 --Activated [ACT] effects
 --e.g. "Solitary Knight, Gancelot" (TD01/003)
 function Auxiliary.AddActivatedEffect(c,desc_id,range,con_func,cost_func,op_func,prop,targ_func)
+	targ_func=targ_func or Auxiliary.HintTarget
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),desc_id))
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -478,7 +504,7 @@ function Auxiliary.AddActivatedEffect(c,desc_id,range,con_func,cost_func,op_func
 	e1:SetRange(range)
 	if con_func then e1:SetCondition(con_func) end
 	if cost_func then e1:SetCost(cost_func) end
-	if targ_func then e1:SetTarget(targ_func) end
+	e1:SetTarget(targ_func)
 	e1:SetOperation(op_func)
 	c:RegisterEffect(e1)
 	return e1
@@ -545,7 +571,7 @@ function Auxiliary.EnableIntercept(c)
 end
 function Auxiliary.InterceptCondition(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	return c:IsHasEffect(EFFECT_INTERCEPT) and c:IsFrontRow() and c:IsRearGuard()
+	return c:IsHasEffect(EFFECT_INTERCEPT) and c:IsRearGuard() and c:IsFrontRow()
 		and Duel.GetAttackTarget()~=c and Duel.GetTurnPlayer()~=tp
 end
 function Auxiliary.InterceptTarget(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -605,6 +631,24 @@ function Auxiliary.BoostOperation(e,tp,eg,ep,ev,re,r,rp)
 end
 function Auxiliary.IsBoostingState(e)
 	return e:GetHandler():IsStatus(STATUS_BOOSTING)
+end
+--"Lord"
+--e.g. "Solitary Liberator, Gancelot" (TD08/001)
+function Auxiliary.EnableLord(c)
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE)
+	e1:SetCode(EFFECT_CANNOT_ATTACK)
+	e1:SetCondition(Auxiliary.LordCondition)
+	c:RegisterEffect(e1)
+	Auxiliary.EnableEffectCustom(c,EFFECT_LORD)
+end
+function Auxiliary.LordFilter(c,clan)
+	return not c:IsFaceup() or not c:IsClan(clan)
+end
+function Auxiliary.LordCondition(e)
+	local c=e:GetHandler()
+	return c:IsHasEffect(EFFECT_LORD)
+		and Duel.IsExistingMatchingCard(Auxiliary.LordFilter,e:GetHandlerPlayer(),LOCATION_ONFIELD,0,1,nil,c:GetClan())
 end
 
 --condition to check who the turn player is
@@ -810,6 +854,7 @@ function Auxiliary.TargetCardFunction(p,f,s,o,min,max,desc,ex,...)
 					return true
 				end
 				if chk==0 then return true end
+				Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 				Duel.Hint(HINT_SELECTMSG,player,desc)
 				Duel.SelectTarget(player,f,tp,s,o,min,max,exg,e,tp,eg,ep,ev,re,r,rp,table.unpack(ext_params))
 			end
@@ -875,3 +920,10 @@ loadutility("duel.lua")
 loadutility("group.lua")
 loadutility("lua.lua")
 loadutility("rule.lua")
+--[[
+	References
+
+	Abilities
+	* Some automatic abilities have the text “AUTO【zone】:When (event), if (requirement)”.  These abilities will trigger if
+	the event happens, even if the requirement is not met.
+]]

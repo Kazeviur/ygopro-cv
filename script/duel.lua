@@ -109,6 +109,18 @@ end
 function Duel.GetVanguard(player)
 	return Duel.GetFirstMatchingCard(Card.IsSequence,player,LOCATION_MZONE,0,nil,2)
 end
+--get a player's rear-guard cards
+function Duel.GetRearGuard(player)
+	local f=function(c)
+		return c:IsFaceup() and c:IsRearGuard()
+	end
+	return Duel.GetMatchingGroup(f,player,LOCATION_ONFIELD,0,nil)
+end
+--get the number of rear-guards a player has 
+function Duel.GetRearGuardCount(player)
+	local g=Duel.GetRearGuard(player)
+	return g:GetCount()
+end
 --get the guardians
 --Note: returns Card if player~=nil, otherwise returns Group
 function Duel.GetGuardian(player)

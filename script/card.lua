@@ -163,25 +163,13 @@ function Card.IsSequenceAbove(c,seq)
 	return c:GetSequence()>=seq
 end
 --check if a card is a vanguard
-function Card.IsVanguard(c,player)
-	--player: the player whose vanguard it is
-	if not c:IsLocation(LOCATION_MZONE) or not c:IsSequence(2) then return false end
-	if player then
-		return c:IsControler(player)
-	else
-		return true
-	end
+function Card.IsVanguard(c)
+	return c:IsLocation(LOCATION_MZONE) and c:IsSequence(2)
 end
 --check if a card is a rear-guard
-function Card.IsRearGuard(c,player)
-	--player: the player whose rear-guard it is
+function Card.IsRearGuard(c)
 	if c:IsLocation(LOCATION_MZONE) and c:IsSequence(2) then return false end
-	if not c:IsLocation(LOCATION_ONFIELD) then return false end
-	if player then
-		return c:IsControler(player)
-	else
-		return true
-	end
+	return c:IsLocation(LOCATION_ONFIELD)
 end
 --check if a card is in the front row
 function Card.IsFrontRow(c)
@@ -256,6 +244,32 @@ function Card.GetRace(c)
 		ct=ct+1
 	end
 	return racename
+end
+--check if a card has a particular series
+--Note: Add series gained by effects to SeriesList
+function Card.IsSeries(c,...)
+	local setname_list={...}
+	if not SeriesList then SeriesList={} end
+	for _,setname in ipairs(setname_list) do
+		if c:IsSetCard(setname,...) then
+			for _,seriesname in ipairs(SeriesList) do
+				if setname==seriesname then return true end
+			end
+		end
+	end
+	return false
+end
+--get a card's series
+function Card.GetSeries(c)
+	local seriesname=0
+	local ct=1
+	while ct<=4095 and seriesname==0 do
+		if c:IsSeries(ct) then
+			seriesname=seriesname+ct
+		end
+		ct=ct+1
+	end
+	return seriesname
 end
 --get a card's drive count
 function Card.GetDriveCount(c)

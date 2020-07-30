@@ -214,7 +214,9 @@ function Rule.RideOperation(e,tp,eg,ep,ev,re,r,rp)
 	if g:GetCount()>0 then
 		Duel.Hint(HINT_SELECTMSG,turnp,HINTMSG_RIDE)
 		local sg=g:Select(turnp,0,1,nil)
-		Duel.Ride(sg,turnp)
+		if sg:GetCount()>0 then
+			Duel.Ride(sg,turnp)
+		end
 	end
 	--raise event for "At the beginning of the main phase"
 	Duel.RaiseEvent(e:GetHandler(),EVENT_CUSTOM+EVENT_MAIN_PHASE_START,e,0,0,0,0)
@@ -252,13 +254,8 @@ function Rule.GuardOperation(e,tp,eg,ep,ev,re,r,rp)
 	e1:SetReset(RESET_PHASE+PHASE_DAMAGE)
 	Duel.RegisterEffect(e1,tp)
 	--retire guardians
-	local e2=Effect.CreateEffect(e:GetHandler())
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e2:SetCode(EVENT_PRE_DAMAGE_CALCULATE)
-	e2:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e2:SetCountLimit(1)
+	local e2=e1:Clone()
 	e2:SetOperation(Rule.RetireOperation)
-	e2:SetReset(RESET_PHASE+PHASE_DAMAGE)
 	Duel.RegisterEffect(e2,tp)
 end
 --damage step (check guardians)
@@ -301,6 +298,7 @@ function Rule.DriveOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.DisableShuffleCheck()
 		Duel.SendtoTrigger(g)
 		local tc=g:GetFirst()
+		if not tc then break end
 		--add drive check status
 		tc:SetStatus(STATUS_DRIVE_CHECK,true)
 		--remove drive check status

@@ -15,8 +15,8 @@ function scard.cfilter(c)
 	return c:IsGrade(3) and c:IsClan(CLAN_KAGERO)
 end
 scard.con1=aux.AND(aux.VCCondition,aux.DriveCheckCondition(scard.cfilter))
-function scard.tgfilter(c)
+function scard.retfilter(c)
 	return c:IsFaceup() and c:IsGradeBelow(1) and c:IsRearGuard()
 end
-scard.tg1=aux.TargetCardFunction(PLAYER_SELF,scard.tgfilter,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)
+scard.tg1=aux.TargetCardFunction(PLAYER_SELF,scard.retfilter,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)
 scard.op1=aux.TargetCardsOperation(Duel.SendtoDrop,REASON_EFFECT)

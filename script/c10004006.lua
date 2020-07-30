@@ -19,9 +19,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 end
 --[[
 	Rulings
-
 	1. Question:When I draw two cards at once, does this ability gives this unit [Power]+2000?
-	2. Answer:Yes, you get [Power]+2000.
-
+	Answer:Yes, you get [Power]+2000.
 	https://cardfight.fandom.com/wiki/Card_Rulings:Sword_Dancer_Angel
 ]]

@@ -133,6 +133,16 @@ RACE_ALIEN				=0x10	--Introduced by "Mr. Invincible" (TD03/003)
 RACE_WORKEROID			=0x11	--Introduced by "Oasis Girl" (TD03/008)
 RACE_NOBLE				=0x12	--Introduced by "Goddess of Flower Divination, Sakuya" (TD04/002)
 RACE_THUNDER_DRAGON		=0x13	--Introduced by "Thunder Break Dragon" (TD06/001)
+RACE_TEAR_DRAGON		=0x14	--Introduced by "Navalgazer Dragon" (TD07/001)
+RACE_AQUAROID			=0x15	--Introduced by "Marine General of the Full Tides, Xenophon" (TD07/002)
+RACE_MERMAID			=0x16	--Introduced by "Battle Siren, Cynthia" (TD07/012)
+RACE_COSMO_DRAGON		=0x17	--Introduced by "Dignified Gold Dragon" (TD08/002)
+RACE_ABYSS_DRAGON		=0x18	--Introduced by "Venomous Breath Dragon" (TD10/002)
+RACE_GOLEM				=0x19	--Introduced by "Revenger Fortress, Fatalita" (TD10/008)
+--Series
+SERIES_LIBERATOR		=0x1	--Supported by "Liberator of Royalty, Phallon" (TD08/005)
+SERIES_ERADICATOR		=0x2	--Supported by "Eradicator, Spark Rain Dragon" (TD09/005)
+SERIES_REVENGER			=0x3	--Supported by "Nullity Revenger, Masquerade" (TD10/005)
 --Reason
 --The reason for sending a card to another location
 REASON_DESTROY		=0x1		--(unused)
@@ -646,6 +656,7 @@ EFFECT_TWIN_DRIVE					=600	--Twin Drive!! skill icon ("Crimson Butterfly, Brigit
 EFFECT_UPDATE_CRITICAL				=601	--Increase/decrease [Critical] ("Solitary Knight, Gancelot" TD01/003)
 EFFECT_INTERCEPT					=602	--Intercept skill icon ("Knight of Silence, Gallatin" TD01/004)
 EFFECT_BOOST						=603	--Boost skill icon ("Little Sage, Marron" TD01/008)
+EFFECT_LORD							=604	--Lord keyword ("Solitary Liberator, Gancelot" TD08/001)
 --Event Code
 --Events that can be used as a trigger for Trigger Effects
 EVENT_STARTUP					=1000	--(unused)
@@ -781,7 +792,7 @@ HINTMSG_STAND			=509	--Select a card to [Stand].
 HINTMSG_FLIPOVER		=510	--Select a card to flip over.
 HINTMSG_ATOHAND			=511	--Select a card to add to your hand.
 HINTMSG_TODECK			=512	--Select a card to return to the deck.
-HINTMSG_CALL			=513	--Select a card to Call to the Rear-Guard Circle.
+HINTMSG_CALL			=513	--Select a card to Call.
 --Information displayed in a dialog box
 ERROR_DECKCOUNT			=1450	--Your deck must be exactly 50 cards!
 ERROR_TRIGGERCOUNT		=1451	--Your deck must have exactly 16 Trigger Units!

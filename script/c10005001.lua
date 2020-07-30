@@ -13,7 +13,7 @@ function scard.initial_effect(c)
 	aux.AddSingleAutoEffect(c,1,EVENT_PLACED_VC,nil,scard.op2,nil,nil,aux.CounterBlastCost(2))
 end
 --gain effect
-scard.con1=aux.AND(aux.LimitBreakCondition(4),aux.AttackTargetCondition(Card.IsVanguard))
+scard.con1=aux.AND(aux.VCCondition,aux.LimitBreakCondition(4),aux.AttackTargetCondition(Card.IsVanguard))
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end

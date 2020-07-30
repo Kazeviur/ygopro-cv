@@ -14,14 +14,15 @@ function scard.initial_effect(c)
 end
 --flip over
 function scard.con1(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetAttacker()
 	return aux.VCCondition(e,tp,eg,ep,ev,re,r,rp) and aux.AttackHitCondition(Card.IsVanguard)(e,tp,eg,ep,ev,re,r,rp)
-		and Duel.GetAttacker():IsRearGuard(tp)
+		and tc:IsRearGuard() and tc:IsControler(tp)
 end
 scard.tg1=aux.TargetCardFunction(PLAYER_SELF,aux.DamageZoneFilter(Card.IsFacedown),LOCATION_REMOVED,0,1,1,HINTMSG_FLIPOVER)
 scard.op1=aux.TargetCardsOperation(Duel.ChangePosition,POS_FACEUP)
 --stand
-scard.cost1=aux.CounterBlastCost(2)
 scard.con2=aux.AND(aux.VCCondition,aux.SelfAttackHitCondition(Card.IsVanguard))
+scard.cost1=aux.CounterBlastCost(2)
 function scard.posfilter(c)
 	return c:IsClan(CLAN_NOVA_GRAPPLER) and c:IsRearGuard() and c:IsAbleToStand()
 end

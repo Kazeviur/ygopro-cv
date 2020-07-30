@@ -63,21 +63,21 @@
 - ~**January 25, 2013** : Trial Deck | TD04 Maiden Princess of the Cherry Blossoms : `10004XXX`~
 - **February 22, 2013** : Booster Pack | BT05 Awakening of Twin Blades : `11005XXX`
 - **March 29, 2013** : Extra Booster Pack | EB01 Comic Style Vol. 1 : `12001XXX`
-- **April 19, 2013** : Trial Deck | TD07 Descendants of the Marine Emperor : `10007XXX`
+- ~**April 19, 2013** : Trial Deck | TD07 Descendants of the Marine Emperor : `10007XXX`~
 - **May 3, 2013** : Booster Pack | BT08 Blue Storm Armada : `11008XXX`
 - **June 28, 2013** : Booster Pack | BT09 Clash of the Knights & Dragons : `11009XXX`
 - **July 26, 2013** : Extra Booster Pack | EB06 Dazzling Divas : `12006XXX`
 - **September 6, 2013** : Extra Booster Pack | EB04 Infinite Phantom Legion : `12004XXX`
 - **September 6, 2013** : Extra Booster Pack | EB05 Celestial Valkyries : `12005XXX`
-- **October 4, 2013** : Trial Deck | TD08 Liberator of the Sanctuary : `10008XXX`
-- **October 4, 2013** : Trial Deck | TD09 Eradicator of the Empire : `10009XXX`
+- ~**October 4, 2013** : Trial Deck | TD08 Liberator of the Sanctuary : `10008XXX`~
+- ~**October 4, 2013** : Trial Deck | TD09 Eradicator of the Empire : `10009XXX`~
 - **October 25, 2013** : Booster Pack | BT11 Seal Dragons Unleashed : `11011XXX`
 - **November 29, 2013** : Mega Trial Deck | MT01 Rise to Royalty : `13001XXX` (TCG only)
 - **December 13, 2013** : Booster Pack | BT10 Triumphant Return of the King of Knights : `11010XXX`
 
 ### [2014](https://en.cf-vanguard.com/cardlist/cardsearch/?expansion=32)
 
-- **February 7, 2014** : Trial Deck | TD10 Purgatory Revenger : `10010XXX`
+- ~**February 7, 2014** : Trial Deck | TD10 Purgatory Revenger : `10010XXX`~
 - **February 7, 2014** : Trial Deck | TD11 Star-vader Invasion : `10011XXX`
 - **February 21, 2014** : Booster Pack | BT12 Binding Force of the Black Rings : `11012XXX`
 - **March 14, 2014** : Trial Deck | TD12 Dimensional Brave Kaiser : `10012XXX`

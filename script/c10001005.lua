@@ -15,11 +15,14 @@ end
 --retire
 scard.con1=aux.VCCondition
 scard.cost1=aux.CounterBlastCost(2)
-scard.tg1=aux.TargetCardFunction(PLAYER_SELF,Card.IsRearGuard,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)
+function scard.retfilter1(c)
+	return c:IsFaceup() and c:IsRearGuard()
+end
+scard.tg1=aux.TargetCardFunction(PLAYER_SELF,scard.retfilter1,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)
 scard.op1=aux.TargetCardsOperation(Duel.SendtoDrop,REASON_EFFECT)
 --retire
 scard.con2=aux.SelfVanguardCondition(Card.IsClan,CLAN_ROYAL_PALADIN)
-function scard.tgfilter(c)
+function scard.retfilter2(c)
 	return c:IsFaceup() and c:IsGradeAbove(2) and c:IsRearGuard()
 end
-scard.tg2=aux.TargetCardFunction(PLAYER_SELF,scard.tgfilter,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)
+scard.tg2=aux.TargetCardFunction(PLAYER_SELF,scard.retfilter2,0,LOCATION_ONFIELD,1,1,HINTMSG_RETIRE)

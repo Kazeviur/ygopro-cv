@@ -38,3 +38,9 @@ function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	--lose effect (twin drive)
 	Duel.LoseEffect(c,EFFECT_TWIN_DRIVE,RESET_DISABLE+RESET_PHASE+PHASE_END,aux.Stringid(sid,3))
 end
+--[[
+	Rulings
+	1. Question:When this unit attacks while it is on (VC), can I still Drive Check?
+	Answer: Yes, you Drive Check each time this unit attacks if that is the case. This unit only loses Twin Drive.
+	https://cardfight.fandom.com/wiki/Card_Rulings:Dragonic_Overlord
+]]

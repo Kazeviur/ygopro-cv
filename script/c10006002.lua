@@ -14,12 +14,11 @@ function scard.initial_effect(c)
 	e1:SetValue(aux.TargetBoolFunction(Card.IsRearGuard))
 	c:RegisterEffect(e1)
 	--gain effect
-	aux.AddSingleAutoEffect(c,1,EVENT_ATTACK_ANNOUNCE,nil,scard.op1,nil,scard.con1)
+	aux.AddSingleAutoEffect(c,1,EVENT_ATTACK_ANNOUNCE,nil,scard.op1,nil,aux.VCCondition)
 	--gain effect
-	aux.AddSingleAutoEffect(c,2,EVENT_ATTACK_ANNOUNCE,nil,scard.op2,nil,scard.con2)
+	aux.AddSingleAutoEffect(c,2,EVENT_ATTACK_ANNOUNCE,nil,scard.op2,nil,aux.RCCondition)
 end
 --gain effect
-scard.con1=aux.VCCondition
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
@@ -27,10 +26,11 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 	aux.AddTempEffectUpdatePower(c,c,4000,RESET_PHASE+PHASE_DAMAGE)
 end
 --gain effect
-scard.con2=aux.AND(aux.RCCondition,aux.SelfVanguardCondition(Card.IsClan,CLAN_NARUKAMI))
 function scard.op2(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not c:IsRelateToEffect(e) or c:IsFacedown() then return end
-	--gain power
-	aux.AddTempEffectUpdatePower(c,c,2000,RESET_PHASE+PHASE_DAMAGE)
+	if aux.SelfVanguardCondition(Card.IsClan,CLAN_NARUKAMI)(e,tp,eg,ep,ev,re,r,rp) then
+		--gain power
+		aux.AddTempEffectUpdatePower(c,c,2000,RESET_PHASE+PHASE_DAMAGE)
+	end
 end
