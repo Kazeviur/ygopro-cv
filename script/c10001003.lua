@@ -20,7 +20,7 @@ function scard.op1(e,tp,eg,ep,ev,re,r,rp)
 		--gain power
 		aux.AddTempEffectUpdatePower(c,c,5000,RESET_PHASE+PHASE_END)
 		--gain critical
-		aux.AddTempEffectCustom(c,c,2,EFFECT_UPDATE_CRITICAL,1,RESET_PHASE+PHASE_END)
+		aux.AddTempEffectCustom(c,c,EFFECT_UPDATE_CRITICAL,1,RESET_PHASE+PHASE_END)
 	end
 end
 --search (to hand)

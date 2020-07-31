@@ -74,10 +74,10 @@ If you do not build your deck according to the following rules, you will lose th
 - `0x80	Ritual` = Heal
 - `0x100	Trap Monster` = Draw
 - `0x200	Union` = Stand
+- `0x1000	Tuner` = Card that has no ability
 	- `Level` = Grade
 	- `ATK` = Power
 	- `DEF` = Shield
-- `0x1000	Tuner` = Card that has no ability
 </details>
 <details>
 <summary>Attribute</summary>

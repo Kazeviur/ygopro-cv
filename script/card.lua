@@ -283,7 +283,11 @@ function Card.GetCriticalCount(c)
 	local res=1
 	local t={c:IsHasEffect(EFFECT_UPDATE_CRITICAL)}
 	for _,te in pairs(t) do
-		res=res+te:GetValue()
+		if type(te:GetValue())=="function" then
+			res=res+te:GetValue()(te,c)
+		else
+			res=res+te:GetValue()
+		end
 	end
 	return res
 end

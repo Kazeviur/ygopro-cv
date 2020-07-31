@@ -249,6 +249,30 @@ function Auxiliary.RegisterCardInfo(c)
 			table.insert(SeriesList,seriesname)
 		end
 	end
+	--display critical
+	local e1=Effect.CreateEffect(c)
+	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_ADJUST)
+	e1:SetRange(LOCATION_ONFIELD)
+	e1:SetOperation(Auxiliary.DisplayCriticalOp)
+	c:RegisterEffect(e1)
+end
+--display critical
+function Auxiliary.DisplayCriticalOp(e,tp,eg,ep,ev,re,r,rp)
+	local c=e:GetHandler()
+	local count=c:GetCriticalCount()
+	local code=300+count
+	if c:GetFlagEffect(code)==0 then
+		c:RegisterFlagEffect(code,0,EFFECT_FLAG_CLIENT_HINT,1,0,code)
+	end
+	local reset_code=300
+	while reset_code>=300 and reset_code<=310 do
+		if reset_code~=code then
+			c:ResetFlagEffect(reset_code)
+		end
+		reset_code=reset_code+1
+	end
 end
 --call procedure
 function Auxiliary.AddCallProcedure(c)
@@ -345,12 +369,7 @@ function Auxiliary.CriticalTriggerOperation(e,tp,eg,ep,ev,re,r,rp)
 	--gain power
 	Auxiliary.AddTempEffectUpdatePower(e:GetHandler(),tc,5000,RESET_PHASE+PHASE_END)
 	--gain critical
-	local e2=Effect.CreateEffect(e:GetHandler())
-	e2:SetType(EFFECT_TYPE_SINGLE)
-	e2:SetCode(EFFECT_UPDATE_CRITICAL)
-	e2:SetValue(1)
-	e2:SetReset(RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END)
-	tc:RegisterEffect(e2)
+	aux.AddTempEffectCustom(e:GetHandler(),tc,EFFECT_UPDATE_CRITICAL,1,RESET_PHASE+PHASE_END)
 end
 --"Heal Trigger"
 --e.g. "Yggdrasil Maiden, Elaine" (TD01/014)
@@ -427,18 +446,16 @@ function Auxiliary.EnableEffectCustom(c,code,con_func,s_range,o_range,targ_func,
 end
 --add a temporary effect to a card
 --code: EFFECT_UPDATE_CRITICAL for "[Critical]+N" (e.g. "Solitary Knight, Gancelot" TD01/003)
-function Auxiliary.AddTempEffectCustom(c,tc,desc_id,code,val,reset_flag,reset_count)
+function Auxiliary.AddTempEffectCustom(c,tc,code,val,reset_flag,reset_count)
 	--c: the card that adds the effect
 	--tc: the card to add the effect to
-	--desc_id: the id of the effect's text (0-15)
 	reset_flag=reset_flag or 0
 	if tc==c then reset_flag=reset_flag+RESET_DISABLE end
 	reset_count=reset_count or 1
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(c:GetOriginalCode(),desc_id))
 	e1:SetType(EFFECT_TYPE_SINGLE)
 	e1:SetCode(code)
-	e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE+EFFECT_FLAG_CLIENT_HINT)
+	e1:SetProperty(EFFECT_FLAG_SET_AVAILABLE)
 	e1:SetValue(val)
 	e1:SetReset(RESET_EVENT+RESETS_STANDARD+reset_flag,reset_count)
 	tc:RegisterEffect(e1)
