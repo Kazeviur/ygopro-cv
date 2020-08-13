@@ -2,7 +2,7 @@ Rule={}
 --register rules
 function Rule.RegisterRules(c)
 	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_NO_TURN_RESET)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE+EFFECT_FLAG_NO_TURN_RESET)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_ADJUST)
 	e1:SetRange(LOCATION_ALL)
@@ -120,19 +120,15 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 	e8:SetCode(EVENT_ADJUST)
 	e8:SetOperation(Rule.TriggerCheckOperation)
 	Duel.RegisterEffect(e8,0)
-	--set lp
+	--win game
 	local e9=Effect.GlobalEffect()
 	e9:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e9:SetCode(EVENT_ADJUST)
-	e9:SetOperation(Rule.SetLPOperation)
+	e9:SetOperation(Rule.WinOperation)
 	Duel.RegisterEffect(e9,0)
-	--win game
-	local e10=Effect.GlobalEffect()
-	e10:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e10:SetCode(EVENT_ADJUST)
-	e10:SetOperation(Rule.WinOperation)
-	Duel.RegisterEffect(e10,0)
 	--override yugioh rules
+	--set lp
+	Rule.set_lp()
 	--draw first turn
 	Rule.draw_first_turn()
 	--cannot summon
@@ -371,13 +367,6 @@ function Rule.move_trigger_unit(c)
 		Duel.SendtoDamage(c)
 	end
 end
---set lp
-function Rule.SetLPOperation(e,tp,eg,ep,ev,re,r,rp)
-	local ct1=Duel.GetDamageCount(PLAYER_ONE)
-	local ct2=Duel.GetDamageCount(PLAYER_TWO)
-	if Duel.GetLP(PLAYER_ONE)~=6-ct1 then Duel.SetLP(PLAYER_ONE,6-ct1) end
-	if Duel.GetLP(PLAYER_TWO)~=6-ct2 then Duel.SetLP(PLAYER_TWO,6-ct2) end
-end
 --win game
 function Rule.WinOperation(e,tp,eg,ep,ev,re,r,rp)
 	local win={}
@@ -392,6 +381,20 @@ function Rule.WinOperation(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 --override yugioh rules
+--set lp
+function Rule.set_lp(tp)
+	local e1=Effect.GlobalEffect()
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetCode(EVENT_ADJUST)
+	e1:SetOperation(Rule.SetLPOperation)
+	Duel.RegisterEffect(e1,0)
+end
+function Rule.SetLPOperation(e,tp,eg,ep,ev,re,r,rp)
+	local ct1=Duel.GetDamageCount(PLAYER_ONE)
+	local ct2=Duel.GetDamageCount(PLAYER_TWO)
+	if Duel.GetLP(PLAYER_ONE)~=6-ct1 then Duel.SetLP(PLAYER_ONE,6-ct1) end
+	if Duel.GetLP(PLAYER_TWO)~=6-ct2 then Duel.SetLP(PLAYER_TWO,6-ct2) end
+end
 --draw first turn
 function Rule.draw_first_turn()
 	local e1=Effect.GlobalEffect()
