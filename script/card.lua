@@ -1,4 +1,4 @@
---Overwritten Card functions
+--Temporary Card functions
 --check if a card has a particular clan or race
 --Note: Overwritten to check for an infinite number of clans and races
 local card_is_set_card=Card.IsSetCard
@@ -9,8 +9,9 @@ function Card.IsSetCard(c,...)
 	end
 	return false
 end
+--Overwritten Card functions
 --get a card's current grade
---Note: Overwritten to check for the correct grade value if it is changed while the card is not in LOCATION_MZONE
+--Note: Overwritten to check for the correct value if it is changed while the card is not in LOCATION_MZONE
 local card_get_level=Card.GetLevel
 function Card.GetLevel(c)
 	local res=c:GetOriginalGrade()
@@ -47,7 +48,7 @@ function Card.IsLevelAbove(c,lv)
 end
 Card.IsGradeAbove=Card.IsLevelAbove
 --get a card's current power
---Note: Overwritten to check for the correct power value if it is changed while the card is not in LOCATION_MZONE
+--Note: Overwritten to check for the correct value if it is changed while the card is not in LOCATION_MZONE
 local card_get_attack=Card.GetAttack
 function Card.GetAttack(c)
 	local res=c:GetOriginalPower()
@@ -85,7 +86,7 @@ function Card.IsAttackAbove(c,atk)
 end
 Card.IsPowerAbove=Card.IsAttackAbove
 --get a card's current shield
---Note: Overwritten to check for the correct shield value if it is changed while the card is not in LOCATION_MZONE
+--Note: Overwritten to check for the correct value if it is changed while the card is not in LOCATION_MZONE
 local card_get_defense=Card.GetDefense
 function Card.GetDefense(c)
 	local res=c:GetOriginalShield()
