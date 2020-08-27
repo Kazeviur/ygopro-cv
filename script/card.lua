@@ -17,11 +17,19 @@ function Card.GetLevel(c)
 	local res=c:GetOriginalGrade()
 	local t1={c:IsHasEffect(EFFECT_UPDATE_GRADE)}
 	for _,te1 in pairs(t1) do
-		res=res+te1:GetValue()
+		if type(te1:GetValue())=="function" then
+			res=res+te1:GetValue()(te1,c)
+		else
+			res=res+te1:GetValue()
+		end
 	end
 	local t2={c:IsHasEffect(EFFECT_CHANGE_GRADE)}
 	for _,te2 in pairs(t2) do
-		res=te2:GetValue()
+		if type(te2:GetValue())=="function" then
+			res=te2:GetValue()(te2,c)
+		else
+			res=te2:GetValue()
+		end
 	end
 	return res
 end
@@ -54,7 +62,11 @@ function Card.GetAttack(c)
 	local res=c:GetOriginalPower()
 	local t1={c:IsHasEffect(EFFECT_UPDATE_POWER)}
 	for _,te1 in pairs(t1) do
-		res=res+te1:GetValue()
+		if type(te1:GetValue())=="function" then
+			res=res+te1:GetValue()(te1,c)
+		else
+			res=res+te1:GetValue()
+		end
 	end
 	--fix wrong stats when using "Boost"
 	if c:IsLocation(LOCATION_MZONE) then
@@ -92,7 +104,11 @@ function Card.GetDefense(c)
 	local res=c:GetOriginalShield()
 	local t1={c:IsHasEffect(EFFECT_UPDATE_SHIELD)}
 	for _,te1 in pairs(t1) do
-		res=res+te1:GetValue()
+		if type(te1:GetValue())=="function" then
+			res=res+te1:GetValue()(te1,c)
+		else
+			res=res+te1:GetValue()
+		end
 	end
 	--fix wrong stats when using "Boost"
 	if c:IsLocation(LOCATION_MZONE) then
