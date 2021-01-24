@@ -116,7 +116,7 @@ function Duel.GetRearGuard(player)
 	end
 	return Duel.GetMatchingGroup(f,player,LOCATION_ONFIELD,0,nil)
 end
---get the number of rear-guards a player has 
+--get the number of rear-guards a player has
 function Duel.GetRearGuardCount(player)
 	local g=Duel.GetRearGuard(player)
 	return g:GetCount()
