@@ -42,7 +42,7 @@ function Duel.ChangePosition(targets,pos)
 		res=res+1
 		--Note: Remove the following if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST
 		if tc:IsAttacker() then
-			tc:RegisterFlagEffect(10000001,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE,0,1)
+			tc:RegisterFlagEffect(FLAG_CODE_ATTACK_CHECK,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE,0,1)
 		end
 	end
 	res=res+duel_change_position(targets,pos)

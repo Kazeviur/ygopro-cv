@@ -251,7 +251,7 @@ function Auxiliary.RegisterCardInfo(c)
 	end
 	--display critical
 	local e1=Effect.CreateEffect(c)
-	e1:SetProperty(EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE+EFFECT_FLAG_IGNORE_IMMUNE)
 	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 	e1:SetCode(EVENT_ADJUST)
 	e1:SetRange(LOCATION_ONFIELD)
@@ -905,7 +905,7 @@ function Auxiliary.DuelOperation(f,p,...)
 	local ext_params={...}
 	return	function(e,tp,eg,ep,ev,re,r,rp)
 				local player=(p==PLAYER_SELF and tp) or (p==PLAYER_OPPO and 1-tp)
-				return f(player,table.unpack(ext_params))
+				f(player,table.unpack(ext_params))
 			end
 end
 --filter for a card in the trigger zone

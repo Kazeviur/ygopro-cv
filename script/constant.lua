@@ -4,6 +4,7 @@ MAX_ID		=268435455	--9 digit, by DataManager::GetDesc()
 MAX_COUNTER	=65535		--max number for adding/removing counters, by card::add_counter(), field::remove_counter()
 MAX_NUMBER	=999999999	--Max number allowed in YGOPro
 --Card ID
+CARD_RULES						=10000000	--Rules (Unofficial card)
 CARD_BLASTER_BLADE				=10001005	--Supported by "Solitary Knight, Gancelot" (TD01/003)
 CARD_WYVERN_STRIKE_TEJAS		=10002006	--Supported by "Wyvern Strike, Jarran" (TD02/011)
 CARD_KING_OF_SWORD				=10003004	--Supported by "Queen of Heart" (TD03/010)
@@ -15,6 +16,10 @@ CARD_BRINGER_OF_GOOD_LUCK_EPONA	=10001013	--EVENT_CUSTOM+EVENT_TRIGGER_UNIT
 CARD_MR_INVINCIBLE				=10003003	--EVENT_CUSTOM+EVENT_MAIN_PHASE_START
 CARD_NGM_PROTOTYPE				=10003006	--EVENT_CUSTOM+EVENT_INTERCEPT
 CARD_BATTLERAIZER				=10003015	--EVENT_CUSTOM+EVENT_BE_RIDE
+--Flag Effect Code (for Card.RegisterFlagEffect, Duel.RegisterFlagEffect)
+FLAG_CODE_RULES			=10000000	--Prevents registering rules twice
+FLAG_CODE_ATTACK_CHECK	=10000001	--Remove this if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST (see rule.lua)
+FLAG_CODE_TRIGGER_CHECK	=10000002	--Prevents registering rules to cards in the Trigger Zone twice (see rule.lua)
 --Location
 LOCATION_ALL		=0xff	--All locations
 LOCATION_DECK		=0x01	--Deck
@@ -535,7 +540,7 @@ EFFECT_SKIP_DP						=180	--Skip Draw Phase
 EFFECT_SKIP_SP						=181	--Skip Standby Phase
 EFFECT_SKIP_M1						=182	--(unused) Skip Main Phase 1
 EFFECT_SKIP_BP						=183	--(unused) Skip Battle Phase
-EFFECT_SKIP_M2						=184	--(unused) Skip Main Phase 2
+EFFECT_SKIP_M2						=184	--Skip Main Phase 2
 EFFECT_CANNOT_BP					=185	--(unused) Cannot conduct Battle Phase
 EFFECT_CANNOT_M2					=186	--Cannot conduct Main Phase 2
 EFFECT_CANNOT_EP					=187	--(unused) Cannot conduct End Phase
@@ -808,9 +813,9 @@ HINTMSG_ATOHAND		=511	--Select a card to add to your hand.
 HINTMSG_TODECK		=512	--Select a card to return to the deck.
 HINTMSG_CALL		=513	--Select a card to Call.
 --Information displayed in a dialog box
-ERROR_DECKCOUNT		=1450	--Your deck must be exactly 50 cards!
+ERROR_DECKCOUNT		=1450	--Your deck must have exactly 50 cards!
 ERROR_TRIGGERCOUNT	=1451	--Your deck must have exactly 16 Trigger Units!
-ERROR_HEALCOUNT		=1452	--You cannot include more than 4 Trigger Units with "HEAL" in your deck!
+ERROR_HEALCOUNT		=1452	--Your deck can't have more than 4 Heal Triggers!
 ERROR_NOTARGETS		=1630	--There is no applicable card.
 --Yes No Message (for Duel.SelectYesNo)
 YESNOMSG_RETIRE	=600	--Retire a card?

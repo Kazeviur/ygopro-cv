@@ -137,7 +137,7 @@ If you do not build your deck according to the following rules, you will lose th
 - `0x2000	Increase/Decrease ATK/DEF` = Increase or decrease a card's [Power] or [Shield]
 - `0x4000	Piercing` = Give a card [Critical]
 - `0x8000	Attack Multiple Times` = ～Reserved～
-- `0x10000	Limit Attack` = Cannot attack
+- `0x10000	Limit Attack` = Prevent a card from attacking
 - `0x20000	Direct Attack` = ～Reserved～
 - `0x40000	Special Summon` = Ride a card
 - `0x80000	Token` = Call a card
@@ -158,7 +158,7 @@ If you do not build your deck according to the following rules, you will lose th
 <summary>Card Search</summary>
 
 You can search for the following specific card information in YGOPro:
-- Ability No Ability: Use the `No Ability` tab, or type `(No ability)` in the search bar
+- Card Ability: Use the `No Ability` tab
 - Card Type: Use the `Type` tab
 - Clan: Type `Clan:` in the search bar
 - Critical: **N/A**

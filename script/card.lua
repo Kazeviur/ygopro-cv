@@ -1,5 +1,5 @@
 --Temporary Card functions
---check if a card has a particular clan or race
+--check if a card has a given clan or race
 --Note: Overwritten to check for an infinite number of clans and races
 local card_is_set_card=Card.IsSetCard
 function Card.IsSetCard(c,...)
@@ -139,14 +139,14 @@ function Card.IsDefenseAbove(c,def)
 	return c:GetDefense()>=def
 end
 Card.IsShieldAbove=Card.IsDefenseAbove
---check if a card has a particular effect
+--check if a card has a given effect
 --Note: Overwritten to not count a lost effect
 local card_is_has_effect=Card.IsHasEffect
 function Card.IsHasEffect(c,code)
 	if c:GetFlagEffectLabel(code) and c:GetFlagEffectLabel(code)>0 then return false end
 	return card_is_has_effect(c,code)
 end
---check if a card is a particular position
+--check if a card is a given position
 --Note: Overwritten to check if the attacking card or a card in LOCATION_SZONE is in [Rest]
 local card_is_position=Card.IsPosition
 function Card.IsPosition(c,pos)
@@ -210,7 +210,7 @@ end
 function Card.IsAttacker(c)
 	return Duel.GetAttacker()==c
 end
---check if a card has a particular clan
+--check if a card has a given clan
 --Note: Add clans gained by effects to ClanList
 function Card.IsClan(c,...)
 	local setname_list={...}
@@ -236,7 +236,7 @@ function Card.GetClan(c)
 	end
 	return clanname
 end
---check if a card has a particular race
+--check if a card has a given race
 --Note: Add races gained by effects to RaceList
 function Card.IsRace(c,...)
 	local setname_list={...}
@@ -262,7 +262,7 @@ function Card.GetRace(c)
 	end
 	return racename
 end
---check if a card has a particular series
+--check if a card has a given series
 --Note: Add series gained by effects to SeriesList
 function Card.IsSeries(c,...)
 	local setname_list={...}

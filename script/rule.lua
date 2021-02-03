@@ -11,8 +11,8 @@ function Rule.RegisterRules(c)
 	c:RegisterEffect(e1)
 end
 function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.GetFlagEffect(PLAYER_ONE,10000000)>0 then return end
-	Duel.RegisterFlagEffect(PLAYER_ONE,10000000,0,0,0)
+	if Duel.GetFlagEffect(PLAYER_ONE,FLAG_CODE_RULES)>0 then return end
+	Duel.RegisterFlagEffect(PLAYER_ONE,FLAG_CODE_RULES,0,0,0)
 	--remove rules
 	Rule.remove_rules(PLAYER_ONE)
 	Rule.remove_rules(PLAYER_TWO)
@@ -160,7 +160,7 @@ function Rule.ApplyRules(e,tp,eg,ep,ev,re,r,rp)
 end
 --remove rules
 function Rule.remove_rules(tp)
-	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_ALL,0,nil,10000000)
+	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_ALL,0,nil,CARD_RULES)
 	if g:GetCount()==0 then return end
 	Duel.DisableShuffleCheck()
 	Duel.SendtoDeck(g,PLAYER_OWNER,SEQ_DECK_UNEXIST,REASON_RULE)
@@ -224,7 +224,7 @@ function Rule.AttackTapOperation(e,tp,eg,ep,ev,re,r,rp)
 		Duel.ChangePosition(a,POS_FACEUP_REST)
 	end
 	--Note: Remove the following if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST
-	if a:GetFlagEffect(10000001)>1 then
+	if a:GetFlagEffect(FLAG_CODE_ATTACK_CHECK)>1 then
 		Duel.ChangePosition(a,POS_FACEUP_STAND)
 	end
 end
@@ -337,7 +337,7 @@ function Rule.TriggerCheckOperation(e,tp,eg,ep,ev,re,r,rp)
 	local g=Duel.GetMatchingGroup(aux.TriggerZoneFilter(),0,LOCATION_REMOVED,LOCATION_REMOVED,nil)
 	if g:GetCount()==0 then return end
 	for c in aux.Next(g) do
-		if c:GetFlagEffect(10000002)==0 then
+		if c:GetFlagEffect(FLAG_CODE_TRIGGER_CHECK)==0 then
 			if Duel.CheckEvent(EVENT_CUSTOM+EVENT_TRIGGER_UNIT) and c:IsStatus(STATUS_CHAINING) then
 				--trigger resolution
 				local e1=Effect.GlobalEffect()
@@ -355,7 +355,7 @@ function Rule.TriggerCheckOperation(e,tp,eg,ep,ev,re,r,rp)
 				if c:IsLocation(LOCATION_REMOVED) then Duel.HintSelection(Group.FromCards(c)) end
 				Rule.move_trigger_unit(c)
 			end
-			c:RegisterFlagEffect(10000002,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE,0,1)
+			c:RegisterFlagEffect(FLAG_CODE_TRIGGER_CHECK,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_DAMAGE,0,1)
 		end
 	end
 end
@@ -464,9 +464,12 @@ function Rule.cannot_main_phase2()
 	local e1=Effect.GlobalEffect()
 	e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET)
 	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_CANNOT_M2)
+	e1:SetCode(EFFECT_SKIP_M2)
 	e1:SetTargetRange(1,1)
 	Duel.RegisterEffect(e1,0)
+	local e2=e1:Clone()
+	e2:SetCode(EFFECT_CANNOT_M2)
+	Duel.RegisterEffect(e2,0)
 end
 --cannot change position
 function Rule.cannot_change_position()
@@ -536,8 +539,7 @@ end
 function Rule.DestroyOperation(e,tp,eg,ep,ev,re,r,rp)
 	local a=Duel.GetAttacker()
 	local d=Duel.GetAttackTarget()
-	if not a or not a:IsLocation(LOCATION_ONFIELD)
-		or not d or not d:IsLocation(LOCATION_ONFIELD) or not d:IsDefensePos() then return end
+	if not a or not a:IsOnField() or not d or not d:IsOnField() or not d:IsDefensePos() then return end
 	local ef1=a:IsHasEffect(EFFECT_INDESTRUCTIBLE) or a:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local ef2=d:IsHasEffect(EFFECT_INDESTRUCTIBLE) or d:IsHasEffect(EFFECT_INDESTRUCTIBLE_BATTLE)
 	local g=Group.CreateGroup()
