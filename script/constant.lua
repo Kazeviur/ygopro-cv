@@ -20,6 +20,7 @@ CARD_BATTLERAIZER				=10003015	--EVENT_CUSTOM+EVENT_BE_RIDE
 FLAG_CODE_RULES			=10000000	--Prevents registering rules twice
 FLAG_CODE_ATTACK_CHECK	=10000001	--Remove this if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST (see rule.lua)
 FLAG_CODE_TRIGGER_CHECK	=10000002	--Prevents registering rules to cards in the Trigger Zone twice (see rule.lua)
+FLAG_CODE_REST_MODE		=10000003	--Workaround to [Rest] a card in LOCATION_SZONE ("Little Sage, Marron" TD01/008)
 --Location
 LOCATION_ALL		=0xff	--All locations
 LOCATION_DECK		=0x01	--Deck
@@ -99,7 +100,7 @@ TRIGGER_HEAL		=0x80	--Heal
 TRIGGER_DRAW		=0x100	--Draw
 TRIGGER_STAND		=0x200	--Stand
 --Nation
-NATION_ALL				=0x2f	--All Nations
+NATION_ALL				=0x2f	--All nations
 NATION_UNITED_SANCTUARY	=0x01	--United Sanctuary
 NATION_DRAGON_EMPIRE	=0x02	--Dragon Empire
 NATION_STAR_GATE		=0x04	--Star Gate
@@ -669,7 +670,6 @@ EFFECT_ADD_LINKMARKER				=423	--(unused)
 EFFECT_REMOVE_LINKMARKER			=424	--(unused)
 EFFECT_CHANGE_LINKMARKER			=425	--(unused)
 --The following is only available in YGOPro CV
-EFFECT_REST_MODE					=500	--Workaround to [Rest] a card in LOCATION_SZONE ("Little Sage, Marron" TD01/008)
 EFFECT_TWIN_DRIVE					=600	--Twin Drive!! skill icon ("Crimson Butterfly, Brigitte" TD01/001)
 EFFECT_UPDATE_CRITICAL				=601	--Increase/decrease [Critical] ("Solitary Knight, Gancelot" TD01/003)
 EFFECT_INTERCEPT					=602	--Intercept skill icon ("Knight of Silence, Gallatin" TD01/004)

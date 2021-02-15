@@ -1,6 +1,6 @@
 --Temporary Card functions
---check if a card has a given clan or race
---Note: Overwritten to check for an infinite number of clans and races
+--check if a card has a given setname
+--Note: Overwritten to check for an infinite number of setnames
 local card_is_set_card=Card.IsSetCard
 function Card.IsSetCard(c,...)
 	local setname_list={...}
@@ -139,32 +139,52 @@ function Card.IsDefenseAbove(c,def)
 	return c:GetDefense()>=def
 end
 Card.IsShieldAbove=Card.IsDefenseAbove
+--get a card's position
+--Note: Overwritten to check if a card is in [Rest] in LOCATION_SZONE
+local card_get_position=Card.GetPosition
+function Card.GetPosition(c)
+	--Note: Remove the following if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST
+	if c:IsAttacker() then return POS_FACEUP_REST end
+	--workaround to check if a card is in [Rest] in LOCATION_SZONE
+	if c:IsLocation(LOCATION_SZONE) then
+		if c:IsFaceup() and c:GetFlagEffect(FLAG_CODE_REST_MODE)==0 then
+			return POS_FACEUP_STAND
+		elseif c:IsFaceup() and c:GetFlagEffect(FLAG_CODE_REST_MODE)>0 then
+			return POS_FACEUP_REST
+		elseif c:GetFlagEffect(FLAG_CODE_REST_MODE)==0 then
+			return POS_STAND
+		elseif c:GetFlagEffect(FLAG_CODE_REST_MODE)>0 then
+			return POS_REST
+		end
+	end
+	return card_get_position(c)
+end
+--check if a card is a given position
+--Note: See Card.GetPosition
+local card_is_position=Card.IsPosition
+function Card.IsPosition(c,pos)
+	--Note: Remove the following if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST
+	if c:IsAttacker() and pos==POS_FACEUP_REST then return true end
+	--workaround to check if a card is in [Rest] in LOCATION_SZONE
+	if c:IsLocation(LOCATION_SZONE) then
+		if c:IsFaceup() and c:GetFlagEffect(FLAG_CODE_REST_MODE)==0 and pos==POS_FACEUP_STAND then
+			return true
+		elseif c:IsFaceup() and c:GetFlagEffect(FLAG_CODE_REST_MODE)>0 and pos==POS_FACEUP_REST then
+			return true
+		elseif c:GetFlagEffect(FLAG_CODE_REST_MODE)==0 and pos==POS_STAND then
+			return true
+		elseif c:GetFlagEffect(FLAG_CODE_REST_MODE)>0 and pos==POS_REST then
+			return true
+		end
+	end
+	return card_is_position(c,pos)
+end
 --check if a card has a given effect
 --Note: Overwritten to not count a lost effect
 local card_is_has_effect=Card.IsHasEffect
 function Card.IsHasEffect(c,code)
 	if c:GetFlagEffectLabel(code) and c:GetFlagEffectLabel(code)>0 then return false end
 	return card_is_has_effect(c,code)
-end
---check if a card is a given position
---Note: Overwritten to check if the attacking card or a card in LOCATION_SZONE is in [Rest]
-local card_is_position=Card.IsPosition
-function Card.IsPosition(c,pos)
-	--Note: Remove the following if YGOPro allows a card to tap itself for EFFECT_ATTACK_COST
-	if pos==POS_REST or pos==POS_FACEUP_REST and c:IsAttacker() then return c:IsFaceup() end
-	--workaround to check if a card in LOCATION_SZONE is in [Rest]
-	if c:IsLocation(LOCATION_SZONE) then
-		if pos==POS_FACEUP_STAND then
-			return c:IsFaceup() and c:GetFlagEffect(EFFECT_REST_MODE)==0
-		elseif pos==POS_FACEUP_REST then
-			return c:IsFaceup() and c:GetFlagEffect(EFFECT_REST_MODE)>0
-		elseif pos==POS_STAND then
-			return c:GetFlagEffect(EFFECT_REST_MODE)==0
-		elseif pos==POS_REST then
-			return c:GetFlagEffect(EFFECT_REST_MODE)>0
-		end
-	end
-	return card_is_position(c,pos)
 end
 --New Card functions
 --check if the serial number of a card's current position is equal to a given value
@@ -178,6 +198,10 @@ end
 --check if the serial number of a card's current position is greater than or equal to a given value
 function Card.IsSequenceAbove(c,seq)
 	return c:GetSequence()>=seq
+end
+--check if a card is attacking
+function Card.IsAttacker(c)
+	return Duel.GetAttacker()==c
 end
 --check if a card is a vanguard
 function Card.IsVanguard(c)
@@ -205,10 +229,6 @@ function Card.IsGuardian(c,player)
 	else
 		return true
 	end
-end
---check if a card is attacking
-function Card.IsAttacker(c)
-	return Duel.GetAttacker()==c
 end
 --check if a card has a given clan
 --Note: Add clans gained by effects to ClanList

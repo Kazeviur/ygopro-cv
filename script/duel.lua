@@ -32,10 +32,10 @@ function Duel.ChangePosition(targets,pos)
 		elseif tc:IsLocation(LOCATION_SZONE) then
 			if pos==POS_FACEUP_REST then
 				--workaround to [Rest] a card in LOCATION_SZONE
-				tc:RegisterFlagEffect(EFFECT_REST_MODE,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,DESC_REST)
+				tc:RegisterFlagEffect(FLAG_CODE_REST_MODE,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,DESC_REST)
 			elseif pos==POS_FACEUP_STAND then
 				--workaround to [Stand] a card in LOCATION_SZONE
-				tc:ResetFlagEffect(EFFECT_REST_MODE)
+				tc:ResetFlagEffect(FLAG_CODE_REST_MODE)
 			end
 			Duel.HintSelection(Group.FromCards(tc))
 		end
@@ -61,7 +61,7 @@ function Duel.MoveToField(c,move_player,target_player,dest,pos,enabled,zone)
 	if duel_move_to_field(c,move_player,target_player,dest,npos,enabled,zone) then res=true end
 	--workaround to [Rest] a card in LOCATION_SZONE
 	if dest==LOCATION_SZONE and pos==POS_FACEUP_REST then
-		c:RegisterFlagEffect(EFFECT_REST_MODE,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,DESC_REST)
+		c:RegisterFlagEffect(FLAG_CODE_REST_MODE,RESET_EVENT+RESETS_STANDARD,EFFECT_FLAG_CLIENT_HINT,1,0,DESC_REST)
 	end
 	return res
 end
