@@ -45,5 +45,5 @@ end
 --to deck
 function scard.op3(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_CARD,0,sid)
-	Duel.SendtoDeck(e:GetHandler(),PLAYER_OWNER,SEQ_DECK_SHUFFLE,REASON_EFFECT)
+	Duel.SendtoDeck(e:GetHandler(),PLAYER_OWNER,SEQ_DECKSHUFFLE,REASON_EFFECT)
 end

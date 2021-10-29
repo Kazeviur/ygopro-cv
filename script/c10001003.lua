@@ -10,7 +10,7 @@ function scard.initial_effect(c)
 	--gain effect
 	aux.AddActivatedEffect(c,0,LOCATION_ONFIELD,aux.VCCondition,aux.CounterBlastCost(2),scard.op1)
 	--search (to hand)
-	aux.AddActivatedEffect(c,1,LOCATION_HAND,nil,aux.SelfToDeckCost(SEQ_DECK_TOP),scard.op2)
+	aux.AddActivatedEffect(c,1,LOCATION_HAND,nil,aux.SelfToDeckCost(SEQ_DECKTOP),scard.op2)
 end
 --gain effect
 function scard.op1(e,tp,eg,ep,ev,re,r,rp)

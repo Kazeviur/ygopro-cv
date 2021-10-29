@@ -37,10 +37,10 @@ LOCATION_ONFIELD	=0x0c	--On the field (LOCATION_MZONE+LOCATION_SZONE)
 LOCATION_DECKBOT	=0x10001	--(unused)
 LOCATION_DECKSHF	=0x20001	--(unused)
 --Deck Sequence (for Duel.SendtoDeck)
-SEQ_DECK_TOP		=0	--Return to the top of the Deck
-SEQ_DECK_BOTTOM		=1	--Return to the bottom of the Deck
-SEQ_DECK_SHUFFLE	=2	--Shuffle into the Deck
-SEQ_DECK_UNEXIST	=-2	--Disappear from the game
+SEQ_DECKTOP			=0	--Return to the top of the Deck
+SEQ_DECKBOTTOM		=1	--Return to the bottom of the Deck
+SEQ_DECKSHUFFLE		=2	--Shuffle into the Deck
+SEQ_DECKUNEXIST		=-2	--Disappear from the game
 --Zone Sequence (for Card.GetSequence, Card.GetPreviousSequence, etc.)
 SEQ_MZONE_LEFT		=0	--(unused) Leftmost Main Monster Zone
 SEQ_MZONE_MID_LEFT	=1	--(unused) Center-left Main Monster Zone

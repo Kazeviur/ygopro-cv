@@ -163,13 +163,13 @@ function Rule.remove_rules(tp)
 	local g=Duel.GetMatchingGroup(Card.IsCode,tp,LOCATION_ALL,0,nil,CARD_RULES)
 	if g:GetCount()==0 then return end
 	Duel.DisableShuffleCheck()
-	Duel.SendtoDeck(g,PLAYER_OWNER,SEQ_DECK_UNEXIST,REASON_RULE)
+	Duel.SendtoDeck(g,PLAYER_OWNER,SEQ_DECKUNEXIST,REASON_RULE)
 end
 --shuffle deck
 function Rule.shuffle_deck(tp)
 	local g=Duel.GetMatchingGroup(Card.IsAbleToDeck,tp,LOCATION_HAND,0,nil)
 	if g:GetCount()==0 then return end
-	Duel.SendtoDeck(g,PLAYER_OWNER,SEQ_DECK_SHUFFLE,REASON_RULE)
+	Duel.SendtoDeck(g,PLAYER_OWNER,SEQ_DECKSHUFFLE,REASON_RULE)
 	Duel.ShuffleDeck(tp)
 end
 --call vanguard
@@ -185,7 +185,7 @@ function Rule.redraw(tp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EXCHANGE)
 	local sg=g:Select(tp,0,g:GetCount(),nil)
 	if sg:GetCount()==0 then return end
-	Duel.SendtoDeck(sg,PLAYER_OWNER,SEQ_DECK_BOTTOM,REASON_RULE)
+	Duel.SendtoDeck(sg,PLAYER_OWNER,SEQ_DECKBOTTOM,REASON_RULE)
 	Duel.BreakEffect()
 	Duel.Draw(tp,sg:GetCount(),REASON_RULE)
 	Duel.ShuffleDeck(tp)
